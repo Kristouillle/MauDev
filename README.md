@@ -4,7 +4,7 @@ Starter project for a bilingual showcase website (FR/EN) built with Astro.
 
 ## Included
 
-- File-based routes for French and English pages
+- Localized routes (`/fr/*`, `/en/*`) powered by dynamic Astro pages
 - Shared layout + navigation + language switcher
 - Projects page with reusable modal component
 - Cookie consent banner scaffold compatible with Google Tag Manager consent workflows
@@ -34,6 +34,6 @@ public/
 
 ## Notes for production
 
-- Replace placeholder contact info in `src/pages/*/contact.astro`.
+- Replace placeholder contact info in `src/pages/[locale]/[page].astro`.
 - Add your GTM container snippet and hook it to consent updates from `public/scripts/cookie-consent.js`.
 - Edit project entries in `src/data/projects.ts` when adding new client projects.

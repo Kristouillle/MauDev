@@ -1,0 +1,21 @@
+---
+import CookieConsent from '../../components/CookieConsent.astro';
+import { siteContent, type Locale } from '../../data/siteContent';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return [{ params: { locale: 'fr' } }, { params: { locale: 'en' } }];
+}
+
+const { locale } = Astro.params as { locale: Locale };
+const content = siteContent[locale];
+const pageTitle = locale === 'fr' ? 'Presentation | MauDev' : 'Overview | MauDev';
+---
+
+<BaseLayout locale={locale} title={pageTitle}>
+  <section class="hero">
+    <h1>{content.home.title}</h1>
+    <p>{content.home.intro}</p>
+  </section>
+  <CookieConsent locale={locale} />
+</BaseLayout>

@@ -1,0 +1,63 @@
+---
+import ProjectsGrid from '../../components/ProjectsGrid.astro';
+import { siteContent, type Locale } from '../../data/siteContent';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+type PageKey = 'about' | 'projects' | 'contact';
+
+export function getStaticPaths() {
+  const locales: Locale[] = ['fr', 'en'];
+  const pageKeys: PageKey[] = ['about', 'projects', 'contact'];
+  return locales.flatMap((locale) => pageKeys.map((page) => ({ params: { locale, page } })));
+}
+
+const { locale, page } = Astro.params as { locale: Locale; page: PageKey };
+const content = siteContent[locale];
+
+const pageTitleByLocale: Record<Locale, Record<PageKey, string>> = {
+  fr: {
+    about: 'A propos | MauDev',
+    projects: 'Projets | MauDev',
+    contact: 'Contact | MauDev'
+  },
+  en: {
+    about: 'About us | MauDev',
+    projects: 'Projects | MauDev',
+    contact: 'Contact | MauDev'
+  }
+};
+---
+
+<BaseLayout locale={locale} title={pageTitleByLocale[locale][page]}>
+  {
+    page === 'about' && (
+      <section class="content-block reveal">
+        <h1>{content.about.title}</h1>
+        <p>{content.about.body}</p>
+      </section>
+    )
+  }
+
+  {
+    page === 'projects' && (
+      <section class="content-block">
+        <h1>{content.projects.title}</h1>
+        <p>{content.projects.subtitle}</p>
+        <ProjectsGrid locale={locale} />
+      </section>
+    )
+  }
+
+  {
+    page === 'contact' && (
+      <section class="content-block reveal">
+        <h1>{content.contact.title}</h1>
+        <p>{content.contact.intro}</p>
+        <ul class="contact-list">
+          <li><strong>{content.contact.emailLabel}:</strong> info@example.com</li>
+          <li><strong>{content.contact.phoneLabel}:</strong> +1 555 010 020</li>
+        </ul>
+      </section>
+    )
+  }
+</BaseLayout>
