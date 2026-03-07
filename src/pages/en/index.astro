@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CookieConsent from '../../components/CookieConsent.astro';
+import { siteContent } from '../../data/siteContent';
+
+const content = siteContent.en;
+---
+
+<BaseLayout locale="en" title="Overview | MauDev">
+  <section class="hero">
+    <h1>{content.home.title}</h1>
+    <p>{content.home.intro}</p>
+  </section>
+  <CookieConsent locale="en" />
+</BaseLayout>

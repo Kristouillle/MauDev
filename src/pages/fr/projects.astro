@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectsGrid from '../../components/ProjectsGrid.astro';
+import { siteContent } from '../../data/siteContent';
+
+const content = siteContent.fr.projects;
+---
+
+<BaseLayout locale="fr" title="Projets | MauDev">
+  <section class="content-block">
+    <h1>{content.title}</h1>
+    <p>{content.subtitle}</p>
+    <ProjectsGrid locale="fr" />
+  </section>
+</BaseLayout>
