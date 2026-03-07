@@ -1,39 +1,86 @@
 ---
-import { projects } from '../data/projects';
-import { siteContent, type Locale } from '../data/siteContent';
+import { projects, type Project } from '../data/projects';
+import type { Locale } from '../data/siteContent';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const content = siteContent[locale].projects;
+
+const toSlug = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const categoryOrder: string[] = [];
+const projectsByCategory = new Map<string, Project[]>();
+
+for (const project of projects) {
+  const categoryName = project.category[locale];
+  if (!projectsByCategory.has(categoryName)) {
+    categoryOrder.push(categoryName);
+    projectsByCategory.set(categoryName, []);
+  }
+
+  projectsByCategory.get(categoryName)?.push(project);
+}
+
+const categoryGroups = categoryOrder.map((categoryName, index) => ({
+  id: `city-${toSlug(categoryName) || String(index + 1)}`,
+  categoryName,
+  projects: projectsByCategory.get(categoryName) ?? []
+}));
+
+const firstCategoryId = categoryGroups[0]?.id ?? '';
+
+const readLocalized = (value: Project['addressNumber']) =>
+  typeof value === 'string' ? value : value[locale];
 ---
 
-<section class="projects-grid">
-  {projects.map((project) => (
-    <article class="project-card" data-project-card>
-      <h3>{project.title[locale]}</h3>
-      <p>{project.summary[locale]}</p>
-      <button
-        type="button"
-        class="button"
-        data-project-open
-        data-project-title={project.title[locale]}
-        data-project-details={project.details[locale]}
+<section class="projects-directory" data-projects-directory data-initial-city={firstCategoryId}>
+  <aside class="projects-directory__cities" aria-label={locale === 'fr' ? 'Liste des villes' : 'City list'}>
+    <ul>
+      {categoryGroups.map((group, index) => (
+        <li>
+          <button
+            type="button"
+            class:list={['projects-city-link', index === 0 && 'is-active']}
+            data-city-nav
+            data-city-target={group.id}
+            aria-controls={group.id}
+          >
+            {group.categoryName}
+          </button>
+        </li>
+      ))}
+    </ul>
+  </aside>
+
+  <div class="projects-directory__list" data-projects-scroll>
+    {categoryGroups.map((group, index) => (
+      <section
+        id={group.id}
+        class:list={['projects-city-group', index === 0 && 'is-active']}
+        data-city-group={group.id}
+        aria-label={group.categoryName}
       >
-        {content.modalCta}
-      </button>
-    </article>
-  ))}
+        <ul class="projects-city-group__projects">
+          {group.projects.map((project) => (
+            <li>
+              <a class="project-line" data-project-link href={`/${locale}/projects/${project.id}`}>
+                <span class="project-line__number">{readLocalized(project.addressNumber)}</span>
+                <span class="project-line__street">{readLocalized(project.addressStreet)}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
 </section>
 
-<dialog class="project-modal" data-project-modal>
-  <article>
-    <h3 data-project-modal-title></h3>
-    <p data-project-modal-details></p>
-    <button type="button" class="button button--secondary" data-project-close>{content.close}</button>
-  </article>
-</dialog>
-
-<script is:inline src="/scripts/project-modal.js"></script>
+<script is:inline src="/scripts/project-modal.js?v=20260307g"></script>

@@ -1,0 +1,31 @@
+---
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import type { Locale } from '../data/siteContent';
+
+interface Props {
+  locale: Locale;
+  title: string;
+}
+
+const { locale, title } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta
+      name="description"
+      content="MauDev showcase pages implemented from Figma layouts."
+    />
+  </head>
+  <body class="body">
+    <main class="main">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

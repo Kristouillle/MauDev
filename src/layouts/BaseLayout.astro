@@ -1,4 +1,5 @@
 ---
+import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { siteContent, type Locale } from '../data/siteContent';
 
@@ -43,8 +44,6 @@ const alternatePath = Astro.url.pathname.replace(`/${locale}`, `/${alternateLoca
       <slot />
     </main>
 
-    <footer class="site-footer">
-      <div class="container">{content.footer}</div>
-    </footer>
+    <Footer locale={locale} />
   </body>
 </html>

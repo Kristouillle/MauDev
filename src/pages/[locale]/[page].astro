@@ -1,7 +1,10 @@
 ---
+import About from '../../components/About.astro';
+import Navbar from '../../components/Navbar.astro';
 import ProjectsGrid from '../../components/ProjectsGrid.astro';
 import { siteContent, type Locale } from '../../data/siteContent';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
 
 type PageKey = 'about' | 'projects' | 'contact';
 
@@ -16,48 +19,46 @@ const content = siteContent[locale];
 
 const pageTitleByLocale: Record<Locale, Record<PageKey, string>> = {
   fr: {
-    about: 'A propos | MauDev',
+    about: 'Comment nous operons | MauDev',
     projects: 'Projets | MauDev',
     contact: 'Contact | MauDev'
   },
   en: {
-    about: 'About us | MauDev',
+    about: 'How we do it | MauDev',
     projects: 'Projects | MauDev',
     contact: 'Contact | MauDev'
   }
 };
 ---
 
-<BaseLayout locale={locale} title={pageTitleByLocale[locale][page]}>
-  {
-    page === 'about' && (
-      <section class="content-block reveal">
-        <h1>{content.about.title}</h1>
-        <p>{content.about.body}</p>
-      </section>
-    )
-  }
-
-  {
-    page === 'projects' && (
-      <section class="content-block">
-        <h1>{content.projects.title}</h1>
-        <p>{content.projects.subtitle}</p>
-        <ProjectsGrid locale={locale} />
-      </section>
-    )
-  }
-
-  {
-    page === 'contact' && (
-      <section class="content-block reveal">
-        <h1>{content.contact.title}</h1>
-        <p>{content.contact.intro}</p>
-        <ul class="contact-list">
-          <li><strong>{content.contact.emailLabel}:</strong> info@example.com</li>
-          <li><strong>{content.contact.phoneLabel}:</strong> +1 555 010 020</li>
-        </ul>
-      </section>
-    )
-  }
-</BaseLayout>
+{
+  page === 'about' || page === 'projects' ? (
+    <PageLayout locale={locale} title={pageTitleByLocale[locale][page]}>
+      <Navbar locale={locale} theme="light" />
+      {
+        page === 'about' ? (
+          <About locale={locale} />
+        ) : (
+          <section class="content-block content-block--projects">
+            <ProjectsGrid locale={locale} />
+          </section>
+        )
+      }
+    </PageLayout>
+  ) : (
+    <BaseLayout locale={locale} title={pageTitleByLocale[locale][page]}>
+      {
+        page === 'contact' && (
+          <section class="content-block reveal">
+            <h1>{content.contact.title}</h1>
+            <p>{content.contact.intro}</p>
+            <ul class="contact-list">
+              <li><strong>{content.contact.emailLabel}:</strong> info@example.com</li>
+              <li><strong>{content.contact.phoneLabel}:</strong> +1 555 010 020</li>
+            </ul>
+          </section>
+        )
+      }
+    </BaseLayout>
+  )
+}

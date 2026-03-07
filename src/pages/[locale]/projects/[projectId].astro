@@ -1,0 +1,174 @@
+---
+import Navbar from '../../../components/Navbar.astro';
+import { projects, type Project } from '../../../data/projects';
+import type { Locale } from '../../../data/siteContent';
+import PageLayout from '../../../layouts/PageLayout.astro';
+
+interface Params {
+  locale: Locale;
+  projectId: string;
+}
+
+export function getStaticPaths() {
+  const locales: Locale[] = ['fr', 'en'];
+  return locales.flatMap((locale) =>
+    projects.map((project) => ({
+      params: {
+        locale,
+        projectId: project.id
+      }
+    }))
+  );
+}
+
+const { locale, projectId } = Astro.params as Params;
+const project = projects.find((entry) => entry.id === projectId);
+
+if (!project) {
+  throw new Error(`Project not found for id: ${projectId}`);
+}
+
+const detailLabels = {
+  fr: {
+    yearBuilt: 'Annee',
+    sqFt: 'Pi.ca',
+    type: 'Type',
+    tenant: 'Locataire',
+    status: 'Statut',
+    details: 'Details',
+    owner: 'Proprietaire',
+    manager: 'Gestion',
+    back: 'Retour aux projets'
+  },
+  en: {
+    yearBuilt: 'Year built',
+    sqFt: 'Sq. ft.',
+    type: 'Type',
+    tenant: 'Tenant',
+    status: 'Status',
+    details: 'Details',
+    owner: 'Owner',
+    manager: 'Managed by',
+    back: 'Back to projects'
+  }
+} as const;
+
+const text = detailLabels[locale];
+const readLocalized = (value: Project['addressNumber']) =>
+  typeof value === 'string' ? value : value[locale];
+
+const pageTitle = `${readLocalized(project.addressNumber)} ${readLocalized(project.addressStreet)} | MauDev`;
+const formattedSqFt = new Intl.NumberFormat(locale === 'fr' ? 'fr-CA' : 'en-CA').format(
+  Number(project.squareFeet)
+);
+---
+
+<PageLayout locale={locale} title={pageTitle}>
+  <Navbar locale={locale} theme="light" />
+
+  <section class="project-detail-page" data-project-detail>
+    <article class="project-detail-page__left">
+
+      <p class="project-detail-page__location">{project.city[locale]}, {project.province[locale]}</p>
+      <h1>
+        <span>{readLocalized(project.addressNumber)}</span>
+        <span>{readLocalized(project.addressStreet)}</span>
+      </h1>
+
+      <dl class="project-detail-page__facts">
+        <dt>{text.yearBuilt}</dt>
+        <dd>{project.yearBuilt}</dd>
+
+        <dt>{text.sqFt}</dt>
+        <dd>{formattedSqFt}</dd>
+
+        <dt>{text.type}</dt>
+        <dd>{project.propertyType[locale]}</dd>
+
+        <dt>{text.tenant}</dt>
+        <dd>{project.tenant[locale]}</dd>
+
+        <dt>{text.status}</dt>
+        <dd>{project.status[locale]}</dd>
+      </dl>
+
+      <section class="project-detail-page__copy" aria-label={text.details}>
+        <h2>{text.details}</h2>
+        <p>{project.detailsIntro[locale]}</p>
+        <p>{project.detailsBody[locale]}</p>
+        <p>{text.owner}: {project.owner[locale]}</p>
+        <p>{text.manager}: {project.manager[locale]}</p>
+      </section>
+
+      <a class="project-detail-page__back" data-crossfade-link href={`/${locale}/projects`}>{text.back}</a>
+    </article>
+
+    <aside class="project-detail-page__right" aria-label={project.title[locale]}>
+      <div class="project-detail-page__gallery">
+        {project.gallery.map((src, index) => (
+          <img
+            src={src}
+            alt={`${readLocalized(project.addressStreet)} ${index + 1}`}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        ))}
+      </div>
+    </aside>
+  </section>
+</PageLayout>
+
+<script is:inline>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const revealProjectDetail = () => {
+    const page = document.querySelector('[data-project-detail]');
+    if (!page) return;
+    requestAnimationFrame(() => {
+      page.classList.add('is-visible');
+    });
+  };
+
+  const setupCrossfadeLinks = () => {
+    const links = document.querySelectorAll('[data-crossfade-link]');
+    if (!links.length) return;
+
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const mouseEvent = event;
+        const anchor = link;
+
+        if (
+          mouseEvent.defaultPrevented ||
+          mouseEvent.button !== 0 ||
+          mouseEvent.metaKey ||
+          mouseEvent.ctrlKey ||
+          mouseEvent.shiftKey ||
+          mouseEvent.altKey
+        ) {
+          return;
+        }
+
+        const href = anchor.getAttribute('href');
+        if (!href) return;
+
+        mouseEvent.preventDefault();
+        document.body.classList.add('is-page-transitioning');
+
+        window.setTimeout(() => {
+          window.location.href = href;
+        }, prefersReducedMotion ? 0 : 260);
+      });
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      revealProjectDetail();
+      setupCrossfadeLinks();
+    });
+  } else {
+    revealProjectDetail();
+    setupCrossfadeLinks();
+  }
+</script>
