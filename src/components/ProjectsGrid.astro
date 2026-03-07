@@ -1,0 +1,39 @@
+---
+import { projects } from '../data/projects';
+import { siteContent, type Locale } from '../data/siteContent';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const content = siteContent[locale].projects;
+---
+
+<section class="projects-grid">
+  {projects.map((project) => (
+    <article class="project-card" data-project-card>
+      <h3>{project.title[locale]}</h3>
+      <p>{project.summary[locale]}</p>
+      <button
+        type="button"
+        class="button"
+        data-project-open
+        data-project-title={project.title[locale]}
+        data-project-details={project.details[locale]}
+      >
+        {content.modalCta}
+      </button>
+    </article>
+  ))}
+</section>
+
+<dialog class="project-modal" data-project-modal>
+  <article>
+    <h3 data-project-modal-title></h3>
+    <p data-project-modal-details></p>
+    <button type="button" class="button button--secondary" data-project-close>{content.close}</button>
+  </article>
+</dialog>
+
+<script src="/scripts/project-modal.js"></script>

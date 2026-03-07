@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteContent } from '../../data/siteContent';
+
+const content = siteContent.en;
+---
+
+<BaseLayout locale="en" title="About us | MauDev">
+  <section class="content-block reveal">
+    <h1>{content.about.title}</h1>
+    <p>{content.about.body}</p>
+  </section>
+</BaseLayout>

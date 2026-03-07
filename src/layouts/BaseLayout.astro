@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+import { siteContent, type Locale } from '../data/siteContent';
+
+interface Props {
+  locale: Locale;
+  title: string;
+}
+
+const { locale, title } = Astro.props;
+const content = siteContent[locale];
+const alternateLocale = locale === 'fr' ? 'en' : 'fr';
+const alternatePath = Astro.url.pathname.replace(`/${locale}`, `/${alternateLocale}`) || `/${alternateLocale}`;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta
+      name="description"
+      content="MauDev corporate showcase website starter built with Astro, bilingual routing and project modal support."
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrapper">
+        <a class="logo" href={`/${locale}`}>MauDev</a>
+        <nav>
+          <ul class="nav-list">
+            {content.navigation.map((item) => (
+              <li><a href={item.href}>{item.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+        <a class="lang-switch" href={alternatePath}>{content.alternateLanguageLabel}</a>
+      </div>
+    </header>
+
+    <main class="container content">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">{content.footer}</div>
+    </footer>
+  </body>
+</html>
