@@ -362,11 +362,16 @@ body.body {
   padding: 2.9rem 0 4.1rem;
 }
 
+.home-green__inner {
+  padding-inline: clamp(1rem, 2.3vw, 2.4rem);
+  width: 100%;
+}
+
 .home-green h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2.35rem, 4.8vw, 3.7rem);
   font-weight: 300;
   margin: 0 0 1.4rem;
-  max-width: 520px;
+  max-width: 760px;
 }
 
 .home-steps {
@@ -378,8 +383,8 @@ body.body {
 
 .step-card {
   border-left: 1px solid rgb(255 255 255 / 25%);
-  min-height: 376px;
-  padding: 1.6rem 1.25rem;
+  min-height: 420px;
+  padding: 1.85rem 1.4rem;
 }
 
 .step-card:first-child {
@@ -389,14 +394,14 @@ body.body {
 .step-card h3 {
   align-items: center;
   display: flex;
-  font-size: 2rem;
+  font-size: clamp(2.15rem, 3.2vw, 2.9rem);
   font-weight: 400;
   gap: 0.65rem;
   margin: 0 0 1.2rem;
 }
 
 .step-card p {
-  font-size: 1.35rem;
+  font-size: clamp(1.45rem, 2vw, 1.85rem);
   font-weight: 300;
   line-height: 1.45;
   margin: 0;
@@ -411,19 +416,28 @@ body.body {
   -webkit-mask: var(--mask) center / contain no-repeat;
 }
 
+.home-green .link-underline {
+  font-size: clamp(2.2rem, 4.2vw, 3.25rem);
+}
+
 .home-projects {
   --projects-sticky-top: clamp(1rem, 3vh, 2.2rem);
   --projects-wire: #f8a097;
   padding: 4.1rem 0;
 }
 
+.home-projects__inner {
+  padding-inline: clamp(1rem, 2.3vw, 2.4rem);
+  width: 100%;
+}
+
 .home-projects__lead {
   background: #fff;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2.35rem, 4.8vw, 3.8rem);
   font-weight: 300;
   line-height: 1.2;
   margin: 0 0 1.2rem;
-  max-width: 1000px;
+  max-width: 1200px;
   padding-bottom: 0.75rem;
   position: sticky;
   top: var(--projects-sticky-top);
@@ -486,22 +500,26 @@ body.body {
 }
 
 .project-spotlight h3 {
-  font-size: clamp(2.3rem, 4vw, 3rem);
+  font-size: clamp(2.6rem, 4.6vw, 3.5rem);
   font-weight: 500;
   margin: 0;
 }
 
 .project-spotlight h4 {
-  font-size: clamp(1.8rem, 3.2vw, 2.25rem);
+  font-size: clamp(2rem, 3.5vw, 2.6rem);
   font-weight: 400;
   margin: 0.35rem 0 0.8rem;
 }
 
 .project-spotlight p {
-  font-size: 1.45rem;
+  font-size: clamp(1.55rem, 2.05vw, 1.95rem);
   font-weight: 300;
   line-height: 1.45;
   margin: 0 0 1.2rem;
+}
+
+.home-projects .link-underline {
+  font-size: clamp(2rem, 3.6vw, 2.85rem);
 }
 
 .about__title-row {
@@ -914,6 +932,14 @@ body.body {
   margin-top: 3.8rem;
 }
 
+.projects-city-group__toggle {
+  display: none;
+}
+
+.projects-city-group__panel {
+  display: block;
+}
+
 .projects-city-group__title {
   color: #878787;
   font-size: 0.8rem;
@@ -1269,48 +1295,106 @@ body.project-modal-open {
     width: min(100% - 2rem, 1440px);
   }
 
+  .content-block--projects {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    padding-bottom: 1rem;
+  }
+
   .projects-directory {
     grid-template-columns: 1fr;
     height: auto;
     margin-top: 1rem;
     min-height: auto;
-    padding-top: 1rem;
+    padding-top: 0;
   }
 
   .projects-directory__cities {
-    overflow-x: auto;
-    position: static;
-  }
-
-  .projects-directory__cities ul {
-    display: flex;
-    gap: 0.95rem;
-    padding-bottom: 0.3rem;
-  }
-
-  .projects-city-link {
-    font-size: 0.95rem;
-    line-height: 1.2;
-    text-transform: none;
-    white-space: nowrap;
+    display: none;
   }
 
   .projects-directory__list {
     border-left: 0;
-    border-top: 1px solid #ededed;
+    border-top: 0;
     height: auto;
     max-height: none;
     overflow: visible;
     padding-left: 0;
-    padding-top: 1rem;
+    padding-top: 0;
   }
 
   .projects-city-group {
+    border-top: 1px solid #ececec;
     min-height: 0;
+    padding: 0.2rem 0 0.45rem;
   }
 
   .projects-city-group + .projects-city-group {
-    margin-top: 2.2rem;
+    margin-top: 0;
+  }
+
+  .projects-city-group__toggle {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: #111;
+    cursor: pointer;
+    display: flex;
+    font-size: clamp(2rem, 10vw, 3rem);
+    font-weight: 400;
+    justify-content: space-between;
+    letter-spacing: 0.01em;
+    line-height: 0.95;
+    padding: 0.65rem 0 0.55rem;
+    text-align: left;
+    text-transform: uppercase;
+    width: 100%;
+  }
+
+  .projects-city-group__icon {
+    flex-shrink: 0;
+    height: 1.35rem;
+    margin-left: 0.8rem;
+    position: relative;
+    width: 1.35rem;
+  }
+
+  .projects-city-group__icon::before,
+  .projects-city-group__icon::after {
+    background: currentColor;
+    content: '';
+    height: 1px;
+    left: 0;
+    position: absolute;
+    top: 50%;
+    transform-origin: center;
+    transition: transform 180ms ease;
+    width: 100%;
+  }
+
+  .projects-city-group__icon::before {
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  .projects-city-group__icon::after {
+    transform: translateY(-50%) rotate(90deg);
+  }
+
+  .projects-city-group.is-active .projects-city-group__icon::before {
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  .projects-city-group.is-active .projects-city-group__icon::after {
+    transform: translateY(-50%) rotate(-45deg);
+  }
+
+  .projects-city-group__panel {
+    display: none;
+  }
+
+  .projects-city-group.is-active .projects-city-group__panel {
+    display: block;
   }
 
   .project-line {

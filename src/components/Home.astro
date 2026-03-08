@@ -19,7 +19,7 @@ const tickerItems = [...text.tickerItems, ...text.tickerItems];
     <div class="width hero__menu" data-node-id="71:29">
       <div class="hero__links">
         <a
-          href={`/${locale}/projects`}
+          href={`/${locale}/about`}
           class="link-underline reveal-in-up"
           style="--reveal-delay: 110ms;"
         >
@@ -46,7 +46,7 @@ const tickerItems = [...text.tickerItems, ...text.tickerItems];
   </section>
 
   <section class="home-green" data-node-id="71:67">
-    <div class="width">
+    <div class="home-green__inner">
       <h2>{text.institutionalTitle}</h2>
       <div class="home-steps">
         {text.steps.map((step, index) => (
@@ -64,7 +64,7 @@ const tickerItems = [...text.tickerItems, ...text.tickerItems];
   </section>
 
   <section class="home-projects" data-node-id="83:326">
-    <div class="width">
+    <div class="home-projects__inner">
       <p class="home-projects__lead">{text.trustStatement}</p>
       <div class="project-stack">
         {text.projects.map((project, index) => (
