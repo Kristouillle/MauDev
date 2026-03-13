@@ -1,0 +1,11 @@
+node_modules
+.git
+.github
+.astro
+src
+public
+db
+.nginx
+conf
+README.md
+compose.yml

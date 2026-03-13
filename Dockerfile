@@ -1,11 +1,13 @@
-FROM node:lts AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+FROM node:20-slim
 
-FROM nginx:alpine AS runtime
-COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/dist /usr/share/nginx/html
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev && npm cache clean --force
+
+COPY dist ./dist
+
+USER node
 EXPOSE 4321
+CMD ["node", "./dist/server/entry.mjs"]

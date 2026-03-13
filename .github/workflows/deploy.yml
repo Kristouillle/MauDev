@@ -1,100 +1,186 @@
+name: Deploy MauDev Website (Astro)
 
-name: Deploy MauDev WebSite *** Astro Framework ***
 on:
   push:
-    branches: [main]
-  
+    branches: [ qa ]
   workflow_dispatch:
 
 concurrency:
-    group: "pages"
-    cancel-in-progress: false
+  group: maudev-deploy
+  cancel-in-progress: false
+
 env:
-    BUILD_PATH: "."
-    VERSION: "01"
-    CURRENT_ENV: "test"
-  
+  VERSION: "01"
+  CURRENT_ENV: "test"
+  VM_LABEL: "vm-maudev-01-test"
+  DEPLOY_DIR: "/root/maudev"
+
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Node.js
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # -------------------------
+      # VALIDATE SECRETS
+      # -------------------------
+
+      - name: Validate required secrets
+        env:
+          PR_SSH_KEY: ${{ secrets.PR_SSH_KEY }}
+          ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
+          ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          required=(LINODE_TOKEN VM_PASSWORD PR_SSH_KEY ASTRO_DB_REMOTE_URL ASTRO_DB_APP_TOKEN)
+          for name in "${required[@]}"; do
+            if [ -z "${!name:-}" ]; then
+              echo "Missing required secret: $name" >&2
+              exit 1
+            fi
+          done
+
+      # -------------------------
+      # NODE + BUILD
+      # -------------------------
+
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 18
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build the project
+      - name: Build Astro project
+        env:
+          ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
+          ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
         run: npm run build
-      
-      - name: Install Linode CLI
+
+      # -------------------------
+      # BUILD IMAGE (EXPORT TO VM)
+      # -------------------------
+
+      - name: Build Docker image
+        run: docker build -t maudev:latest .
+
+      - name: Export Docker image
+        run: docker save maudev:latest | gzip > maudev-image.tar.gz
+
+      # -------------------------
+      # INSTALL TOOLS (LINODE)
+      # -------------------------
+
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Install Linode CLI  
-        run: |
-            python3 --version
-            pip3 --version
-            pip3 install linode-cli --upgrade
-      
-      - name: Linode VM
-        id: vm
-        run: |
-          if [
-            linode-cli linodes list --label  "vm-maudev-${{ env.VERSION }}-${{ env.CURRENT_ENV }}" --json | jq -e '.[0]'; then
-              echo "Linode VM already exists. Skipping creation."
-              IP=$(linode-cli linodes list --label "vm-maudev-${{ env.VERSION }}-${{ env.CURRENT_ENV }}" --json | jq -r '.[0].ipv4[0]')
-              echo "IP=$IP" >> $GITHUB_ENV
-            else  
-              linode-cli linodes create --type g6-standard-1 --region us-east --image debian-13 --root_pass "${{ env.VM_PASSWORD }}" --label "vm-maudev-${{ env.VERSION }}-${{ env.CURRENT_ENV }}" --tags "mau-dev" --wait
-              IP=$(linode-cli linodes list --label "vm-maudev-${{ env.VERSION }}-${{ env.CURRENT_ENV }}" --json | jq -r '.[0].ipv4[0]')
-              echo "IP=$IP" >> $GITHUB_ENV
-            fi
-          ]
+          python-version: "3.12"
 
-      - name: Deploy to Linode VM
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Install Linode CLI
+        run: pip install linode-cli --upgrade
+
+      # -------------------------
+      # SSH KEY
+      # -------------------------
+
+      - name: Prepare SSH key
         run: |
-          cat << 'EOF' > key.pem
-            ${{ secrets.PR_SSH_KEY }}
+          set -euo pipefail
+
+          cat > key.pem <<'EOF'
+          ${{ secrets.PR_SSH_KEY }}
           EOF
-
           chmod 600 key.pem
 
-          ssh -o StrictHostKeyChecking=no -i key.pem -r compose.yml root@${{ env.IP }} << 'ENDSSH'
+          ssh-keygen -y -f key.pem > key.pub
+          echo "PUBKEY=$(cat key.pub)" >> "$GITHUB_ENV"
 
-            apt update
-            apt install -y nginx
 
-            mkdir -p /var/www/site
-            sudo apt update
-            sudo apt install ca-certificates curl
-            sudo install -m 0755 -d /etc/apt/keyrings
-            sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-            sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-            sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
-              Types: deb
-              URIs: https://download.docker.com/linux/debian
-              Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
-              Components: stable
-              Signed-By: /etc/apt/keyrings/docker.asc
-            EOF
-            sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-            sudo apt update
+      # -------------------------
+      # CREATE VM IF NEEDED
+      # -------------------------
 
-            cat << 'EOF' > Caddyfile
-              ${{vars.DOMAIN}} {
-                reverse_proxy MauDev:4321
-              }
-            EOF
+      - name: Ensure Linode VM exists
+        id: vm
+        run: |
+          set -euo pipefail
+          EXISTING=$(linode-cli linodes list --label "${{ env.VM_LABEL }}" --json)
+          IP=$(echo "$EXISTING" | jq -r '.[0].ipv4[0]')
+          echo "ip=$IP" >> "$GITHUB_OUTPUT"
+          echo "IP=$IP" >> "$GITHUB_ENV"
+          echo "Server IP: $IP"
 
-            mkdir conf
-            mv Caddyfile conf/Caddyfile
+      # -------------------------
+      # UPLOAD DEPLOY ASSETS
+      # -------------------------
 
-            docker compose -f compose.yml up -d --build
+      - name: Prepare remote deploy directory
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ steps.vm.outputs.ip }} "mkdir -p '$DEPLOY_DIR'"
+
+      - name: Create runtime env file
+        run: |
+          cat > .deploy.env <<EOF
+          ASTRO_DB_REMOTE_URL=${{ secrets.ASTRO_DB_REMOTE_URL }}
+          ASTRO_DB_APP_TOKEN=${{ secrets.ASTRO_DB_APP_TOKEN }}
+          EOF
+
+      - name: Upload deploy assets
+        run: |
+          scp -o StrictHostKeyChecking=no -i key.pem compose.yml root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/compose.yml"
+          scp -o StrictHostKeyChecking=no -i key.pem maudev-image.tar.gz root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/maudev-image.tar.gz"
+          scp -o StrictHostKeyChecking=no -i key.pem .deploy.env root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/.env"
+          scp -o StrictHostKeyChecking=no -i key.pem -r conf root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/"
+
+      # -------------------------
+      # DEPLOY
+      # -------------------------
+
+      - name: Deploy application
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ steps.vm.outputs.ip }} << 'ENDSSH'
+          set -euo pipefail
+
+          cd /root/maudev
+
+          apt-get update
+          apt-get install -y ca-certificates curl jq gzip
+
+          # Install Docker if missing
+          if ! command -v docker >/dev/null 2>&1; then
+            install -m 0755 -d /etc/apt/keyrings
+
+            curl -fsSL https://download.docker.com/linux/debian/gpg \
+              -o /etc/apt/keyrings/docker.asc
+
+            chmod a+r /etc/apt/keyrings/docker.asc
+
+            echo \
+              "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+              https://download.docker.com/linux/debian \
+              $(. /etc/os-release && echo $VERSION_CODENAME) stable" > /etc/apt/sources.list.d/docker.list
+
+            apt-get update
+            apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            systemctl enable --now docker || true
+          fi
+
+          if ! docker compose version >/dev/null 2>&1; then
+            apt-get update
+            apt-get install -y docker-compose-plugin
+          fi
+
+          gunzip -c maudev-image.tar.gz | docker load
+          docker compose -f compose.yml up -d
 
           ENDSSH
-          
