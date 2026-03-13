@@ -51,7 +51,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 23
           cache: npm
 
       - name: Install dependencies
@@ -96,8 +96,9 @@ jobs:
       - name: Prepare remote deploy directory
         run: |
           cat > key.pem <<'EOF'
-            ${{ secrets.PR_SSH_KEY }}
+          ${{ secrets.PR_SSH_KEY }}
           EOF
+          head -n 2 key.pem
           chmod 600 key.pem
 
           ssh-keygen -y -f key.pem > key.pub
