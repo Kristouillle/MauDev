@@ -30,12 +30,13 @@ jobs:
       - name: Validate required secrets
         env:
           PR_SSH_KEY: ${{ secrets.PR_SSH_KEY }}
+          VM_IP: ${{ vars.VM_IP }}
           ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
           ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
         run: |
           set -euo pipefail
 
-          required=(PR_SSH_KEY ASTRO_DB_REMOTE_URL ASTRO_DB_APP_TOKEN)
+          required=(PR_SSH_KEY VM_IP ASTRO_DB_REMOTE_URL ASTRO_DB_APP_TOKEN)
           for name in "${required[@]}"; do
             if [ -z "${!name:-}" ]; then
               echo "Missing required secret: $name" >&2
@@ -101,7 +102,7 @@ jobs:
 
           ssh-keygen -y -f key.pem > key.pub
           echo "PUBKEY=$(cat key.pub)" >> "$GITHUB_ENV"
-          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ steps.vm.outputs.ip }} "mkdir -p '$DEPLOY_DIR'"
+          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ env.VM_IP }} "mkdir -p '$DEPLOY_DIR'"
 
       - name: Create runtime env file
         run: |
@@ -112,10 +113,10 @@ jobs:
 
       - name: Upload deploy assets
         run: |
-          scp -o StrictHostKeyChecking=no -i key.pem compose.yml root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/compose.yml"
-          scp -o StrictHostKeyChecking=no -i key.pem maudev-image.tar.gz root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/maudev-image.tar.gz"
-          scp -o StrictHostKeyChecking=no -i key.pem .deploy.env root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/.env"
-          scp -o StrictHostKeyChecking=no -i key.pem -r conf root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/"
+          scp -o StrictHostKeyChecking=no -i key.pem compose.yml root@${{ env.VM_IP }}:"$DEPLOY_DIR/compose.yml"
+          scp -o StrictHostKeyChecking=no -i key.pem maudev-image.tar.gz root@${{ env.VM_IP }}:"$DEPLOY_DIR/maudev-image.tar.gz"
+          scp -o StrictHostKeyChecking=no -i key.pem .deploy.env root@${{ env.VM_IP }}:"$DEPLOY_DIR/.env"
+          scp -o StrictHostKeyChecking=no -i key.pem -r conf root@${{ env.VM_IP }}:"$DEPLOY_DIR/"
 
       # -------------------------
       # DEPLOY
@@ -123,7 +124,7 @@ jobs:
 
       - name: Deploy application
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ steps.vm.outputs.ip }} << 'ENDSSH'
+          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ env.VM_IP }} << 'ENDSSH'
           set -euo pipefail
 
           cd /root/maudev
