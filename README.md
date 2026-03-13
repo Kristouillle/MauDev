@@ -35,5 +35,5 @@ public/
 ## Notes for production
 
 - Replace placeholder contact info in `src/pages/[locale]/[page].astro`.
-- Add your GTM container snippet and hook it to consent updates from `public/scripts/cookie-consent.js`.
+- Add your GTM container snippet and hook it to consent updates from `src/scripts/cookie-consent.js`.
 - Edit project entries in `src/data/projects.ts` when adding new client projects.

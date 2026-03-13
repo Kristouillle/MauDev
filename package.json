@@ -4,12 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "astro dev --remote",
+    "build": "astro build --remote",
     "preview": "astro preview",
     "check": "astro check"
   },
   "dependencies": {
-    "astro": "^4.16.18"
+    "@astrojs/db": "^0.20.0",
+    "@astrojs/sitemap": "^3.7.1",
+    "@astrojs/vercel": "^10.0.0",
+    "astro": "^6.0.3"
   }
 }

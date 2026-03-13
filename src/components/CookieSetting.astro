@@ -1,0 +1,84 @@
+---
+import "../styles/cookie-banner.css";
+import { siteContent, type Locale } from "../data/siteContent";
+
+interface Props {
+    locale: Locale;
+}
+
+const { locale } = Astro.props;
+const text = siteContent[locale].cookieBanner;
+
+---
+<div>
+    <div>
+        <form id="consent-form" data-consent-form>
+            <div data-cookie-settings hidden>
+                <div class="cookie-setting">
+                    <div>
+                        <p class="cookie-setting__desc">
+                            {text.essentials}
+                        </p>
+                    </div>
+                    <label class="switch" for="ipConsent">
+                        <input
+                            type="checkbox"
+                            data-consent="ip"
+                            checked
+                            id="ipConsent"
+                            name="ipConsent"
+                            value="true"
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cookie-setting">
+                    <div>
+                        <p class="cookie-setting__desc">
+                            {text.analytics}
+                        </p>
+                    </div>
+                    <label class="switch" for="gaConsent">
+                        <input
+                            type="checkbox"
+                            data-consent="analytics"
+                            checked
+                            id="gaConsent"
+                            name="gaConsent"
+                            value="true"
+                        />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="button-left">
+                    <button
+                        class="button"
+                        data-consent-action="save"
+                        hidden
+                        type="button"
+                    >
+                        {text.saveBtn}
+                    </button>
+                </div>
+            </div>
+            <div class="cookie-banner__actions">
+                <button
+                    type="button"
+                    class="button"
+                    data-consent-action="accept"
+                    >{text.accept}</button
+                >
+                <button
+                    type="button"
+                    class="button button--secondary"
+                    data-consent-action="reject">{text.reject}</button
+                >
+                <button
+                    type="button"
+                    class="button button--secondary"
+                    data-consent-action="personalize">{text.personalize}</button
+                >
+            </div>
+        </form>
+    </div>
+</div>

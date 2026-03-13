@@ -1,5 +1,7 @@
 ---
 import { siteContent, type Locale } from '../data/siteContent';
+import CookieSetting from './CookieSetting.astro';
+import consentScriptUrl from '../scripts/cookie-consent.js?url';
 
 interface Props {
   locale: Locale;
@@ -12,10 +14,8 @@ const text = siteContent[locale].cookieBanner;
 <section class="cookie-banner" data-cookie-banner hidden>
   <p class="cookie-banner__title">{text.title}</p>
   <p>{text.description}</p>
-  <div class="cookie-banner__actions">
-    <button type="button" class="button" data-consent-action="accept">{text.accept}</button>
-    <button type="button" class="button button--secondary" data-consent-action="reject">{text.reject}</button>
-  </div>
+  <CookieSetting  locale={locale}/>
 </section>
 
-<script is:inline src="/scripts/cookie-consent.js"></script>
+<script type="module" src={consentScriptUrl}></script>
+<script type="module" src="/scripts/init-consent.js"></script>

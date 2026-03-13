@@ -1,0 +1,99 @@
+
+name: Deploy MauDev WebSite *** Astro Framework ***
+on:
+  push:
+    branches: [main]
+    workflow_dispatch:
+
+  concurrency:
+    group: "pages"
+    cancel-in-progress: false
+
+  env:
+    BUILD_PATH: "."
+    VERSION: "01"
+    CURRENT_ENV: "test"
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+      
+      - name: Install Linode CLI
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+        run: |
+            python3 --version
+            pip3 --version
+            pip3 install linode-cli --upgrade
+      
+      - name: Linode VM
+        id: vm
+        run: |
+          if [
+            linode-cli linodes list --label  "vm-maudev-${{ env.VERSION }}-${{ env.CURRENT_ENV }}" --json | jq -e '.[0]'; then
+              echo "Linode VM already exists. Skipping creation."
+              IP=$(linode-cli linodes list --label "vm-maudev-${{ env.VERSION }}-${{ env.CURRENT_ENV }}" --json | jq -r '.[0].ipv4[0]')
+              echo "IP=$IP" >> $GITHUB_ENV
+            else  
+              linode-cli linodes create --type g6-standard-1 --region us-east --image debian-13 --root_pass "${{ env.VM_PASSWORD }}" --label "vm-maudev-${{ env.VERSION }}-${{ env.CURRENT_ENV }}" --tags "mau-dev" --wait
+              IP=$(linode-cli linodes list --label "vm-maudev-${{ env.VERSION }}-${{ env.CURRENT_ENV }}" --json | jq -r '.[0].ipv4[0]')
+              echo "IP=$IP" >> $GITHUB_ENV
+            fi
+          ]
+
+      - name: Deploy to Linode VM
+        run: |
+          cat << 'EOF' > key.pem
+            ${{ secrets.PR_SSH_KEY }}
+          EOF
+
+          chmod 600 key.pem
+
+          ssh -o StrictHostKeyChecking=no -i key.pem -r compose.yml root@${{ env.IP }} << 'ENDSSH'
+
+            apt update
+            apt install -y nginx
+
+            mkdir -p /var/www/site
+            sudo apt update
+            sudo apt install ca-certificates curl
+            sudo install -m 0755 -d /etc/apt/keyrings
+            sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+            sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+            sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+              Types: deb
+              URIs: https://download.docker.com/linux/debian
+              Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+              Components: stable
+              Signed-By: /etc/apt/keyrings/docker.asc
+            EOF
+            sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            sudo apt update
+
+            cat << 'EOF' > Caddyfile
+              ${{vars.DOMAIN}} {
+                reverse_proxy MauDev:4321
+              }
+            EOF
+
+            mkdir conf
+            mv Caddyfile conf/Caddyfile
+
+            docker compose -f compose.yml up -d --build
+
+          ENDSSH
+          

@@ -1,31 +1,37 @@
 ---
+import CookieBanner from '../components/CookieBanner.astro';
 import Footer from '../components/Footer.astro';
-import '../styles/global.css';
-import { siteContent, type Locale } from '../data/siteContent';
+import "../styles/global.css";
+import { siteContent, type Locale } from "../data/siteContent";
+import Head from "../components/Head.astro";
 
 interface Props {
   locale: Locale;
   title: string;
 }
 
+type PageKey = 'home' | 'about' | 'projects' | 'contact';
+
 const { locale, title } = Astro.props;
 const content = siteContent[locale];
-const alternateLocale = locale === 'fr' ? 'en' : 'fr';
-const alternatePath = Astro.url.pathname.replace(`/${locale}`, `/${alternateLocale}`) || `/${alternateLocale}`;
+const alternateLocale = locale === "fr" ? "en" : "fr";
+const alternatePath =  Astro.url.pathname.replace(`/${locale}`, `/${alternateLocale}`) ||  `/${alternateLocale}`;
+
+const pathParts = Astro.url.pathname.split("/").filter(Boolean);
+const pageKey: PageKey = (pathParts[1] as PageKey) ?? 'home';
+
+const seo = content[pageKey];
 ---
 
 <!doctype html>
 <html lang={locale}>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <meta
-      name="description"
-      content="MauDev corporate showcase website starter built with Astro, bilingual routing and project modal support."
+    <Head
+      title={seo.title}
+      description={seo.meta_description}
     />
   </head>
-  <body>
+ <body>
     <header class="site-header">
       <div class="container nav-wrapper">
         <a class="logo" href={`/${locale}`}>MauDev</a>
@@ -43,7 +49,11 @@ const alternatePath = Astro.url.pathname.replace(`/${locale}`, `/${alternateLoca
     <main class="container content">
       <slot />
     </main>
-
+    <div class="container">
+      <CookieBanner locale={locale} />
+    </div>
     <Footer locale={locale} />
   </body>
 </html>
+
+
