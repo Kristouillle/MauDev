@@ -14,6 +14,7 @@ env:
   CURRENT_ENV: "test"
   VM_LABEL: "vm-maudev-01-test"
   DEPLOY_DIR: "/root/maudev"
+  VM_IP: ${{ secrets.IP }}
 
 jobs:
   deploy:
@@ -30,7 +31,6 @@ jobs:
       - name: Validate required secrets
         env:
           PR_SSH_KEY: ${{ secrets.PR_SSH_KEY }}
-          VM_IP: ${{ secrets.IP }}
           ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
           ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
         run: |
@@ -78,16 +78,16 @@ jobs:
       # INSTALL TOOLS (LINODE)
       # -------------------------
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      # - name: Setup Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.12"
 
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
+      # - name: Install jq
+      #   run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Install Linode CLI
-        run: pip install linode-cli --upgrade
+      # - name: Install Linode CLI
+      #   run: pip install linode-cli --upgrade
 
       # -------------------------
       # UPLOAD DEPLOY ASSETS
@@ -98,11 +98,8 @@ jobs:
           cat > key.pem <<'EOF'
           ${{ secrets.PR_SSH_KEY }}
           EOF
-          head -n 2 key.pem
           chmod 600 key.pem
 
-          ssh-keygen -y -f key.pem > key.pub
-          echo "PUBKEY=$(cat key.pub)" >> "$GITHUB_ENV"
           ssh -o StrictHostKeyChecking=no -i key.pem root@${{ env.VM_IP }} "mkdir -p '$DEPLOY_DIR'"
 
       - name: Create runtime env file
@@ -114,6 +111,7 @@ jobs:
 
       - name: Upload deploy assets
         run: |
+          chmod 600 key.pem
           scp -o StrictHostKeyChecking=no -i key.pem compose.yml root@${{ env.VM_IP }}:"$DEPLOY_DIR/compose.yml"
           scp -o StrictHostKeyChecking=no -i key.pem maudev-image.tar.gz root@${{ env.VM_IP }}:"$DEPLOY_DIR/maudev-image.tar.gz"
           scp -o StrictHostKeyChecking=no -i key.pem .deploy.env root@${{ env.VM_IP }}:"$DEPLOY_DIR/.env"
