@@ -88,26 +88,9 @@ jobs:
       - name: Install Linode CLI
         run: pip install linode-cli --upgrade
 
-      # -------------------------
-      # SSH KEY
-      # -------------------------
-
-      - name: Prepare SSH key
-        run: |
-          set -euo pipefail
-
-          cat > key.pem <<'EOF'
-          ${{ secrets.PR_SSH_KEY }}
-          EOF
-          chmod 600 key.pem
-
-          ssh-keygen -y -f key.pem > key.pub
-          echo "PUBKEY=$(cat key.pub)" >> "$GITHUB_ENV"
-
-
 
       # -------------------------
-      # CREATE VM IF NEEDED
+      # VALIDE VM EXISTS 
       # -------------------------
 
       - name: Ensure Linode VM exists
@@ -126,6 +109,13 @@ jobs:
 
       - name: Prepare remote deploy directory
         run: |
+          cat > key.pem <<'EOF'
+            ${{ secrets.PR_SSH_KEY }}
+          EOF
+          chmod 600 key.pem
+
+          ssh-keygen -y -f key.pem > key.pub
+          echo "PUBKEY=$(cat key.pub)" >> "$GITHUB_ENV"
           ssh -o StrictHostKeyChecking=no -i key.pem root@${{ steps.vm.outputs.ip }} "mkdir -p '$DEPLOY_DIR'"
 
       - name: Create runtime env file
