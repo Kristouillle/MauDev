@@ -1,11 +1,9 @@
 ---
-
 import CookieBanner from '../../components/CookieBanner.astro';
 import Home from '../../components/Home.astro';
 import Navbar from '../../components/Navbar.astro';
+import type { Locale } from '../../data/siteContent';
 import PageLayout from '../../layouts/PageLayout.astro';
-
-import { isLocale, siteContent, type Locale } from '../../data/siteContent';
 
 export function getStaticPaths() {
   return [{ params: { locale: 'fr' } }, { params: { locale: 'en' } }];
