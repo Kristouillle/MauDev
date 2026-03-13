@@ -35,7 +35,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          required=(VM_PASSWORD PR_SSH_KEY ASTRO_DB_REMOTE_URL ASTRO_DB_APP_TOKEN)
+          required=(PR_SSH_KEY ASTRO_DB_REMOTE_URL ASTRO_DB_APP_TOKEN)
           for name in "${required[@]}"; do
             if [ -z "${!name:-}" ]; then
               echo "Missing required secret: $name" >&2
