@@ -88,21 +88,6 @@ jobs:
       - name: Install Linode CLI
         run: pip install linode-cli --upgrade
 
-
-      # -------------------------
-      # VALIDE VM EXISTS 
-      # -------------------------
-
-      - name: Ensure Linode VM exists
-        id: vm
-        run: |
-          set -euo pipefail
-          EXISTING=$(linode-cli linodes list --label "${{ env.VM_LABEL }}" --json)
-          IP=$(echo "$EXISTING" | jq -r '.[0].ipv4[0]')
-          echo "ip=$IP" >> "$GITHUB_OUTPUT"
-          echo "IP=$IP" >> "$GITHUB_ENV"
-          echo "Server IP: $IP"
-
       # -------------------------
       # UPLOAD DEPLOY ASSETS
       # -------------------------
