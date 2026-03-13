@@ -30,7 +30,7 @@ jobs:
       - name: Validate required secrets
         env:
           PR_SSH_KEY: ${{ secrets.PR_SSH_KEY }}
-          VM_IP: ${{ vars.VM_IP }}
+          VM_IP: ${{ secrets.IP }}
           ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
           ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
         run: |
