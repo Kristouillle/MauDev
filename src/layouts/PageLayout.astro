@@ -1,28 +1,28 @@
 ---
-import Footer from '../components/Footer.astro';
-import '../styles/global.css';
-import type { Locale } from '../data/siteContent';
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import  { siteContent, type Locale } from "../data/siteContent";
+import Head from "../components/Head.astro";
 
 interface Props {
   locale: Locale;
-  title: string;
 }
+type PageKey = 'home' | 'about' | 'projects' | 'contact';
 
-const { locale, title } = Astro.props;
+const { locale } = Astro.props;
+const content = siteContent[locale];
+
+const pathParts = Astro.url.pathname.split("/").filter(Boolean);
+const pageKey: PageKey = (pathParts[1] as PageKey) ?? 'home';
+
+const seo = content[pageKey];
 ---
 
 <!doctype html>
 <html lang={locale}>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <meta
-      name="description"
-      content="MauDev showcase pages implemented from Figma layouts."
-    />
-  </head>
-  <body class="body">
+    <Head title={seo.title} description={seo.meta_description} />
+  </head><body class="body">
     <main class="main">
       <slot />
     </main>

@@ -1,4 +1,4 @@
-const GA_ID = "import.meta.env.PUBLIC_GA_ID";
+const GA_ID = import.meta.env.PUBLIC_GA_ID;
 
 const CONSENT_KEY = "site-consent";
 const CONSENT_SYNC = `${CONSENT_KEY}-SYNC`;
