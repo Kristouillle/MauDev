@@ -54,11 +54,7 @@ jobs:
           ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
           PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
         run: |
-          docker build -t maudev:latest \
-            --build-arg ASTRO_DB_REMOTE_URL="$ASTRO_DB_REMOTE_URL" \
-            --build-arg ASTRO_DB_APP_TOKEN="$ASTRO_DB_APP_TOKEN" \
-            .
-
+          docker build -t maudev:latest --build-arg ASTRO_DB_REMOTE_URL="$ASTRO_DB_REMOTE_URL" --build-arg ASTRO_DB_APP_TOKEN="$ASTRO_DB_APP_TOKEN" .
       - name: Export Docker image
         run: docker save maudev:latest | gzip > maudev-image.tar.gz
 
