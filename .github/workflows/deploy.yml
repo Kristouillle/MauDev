@@ -57,7 +57,6 @@ jobs:
           docker build -t maudev:latest \
             --build-arg ASTRO_DB_REMOTE_URL="$ASTRO_DB_REMOTE_URL" \
             --build-arg ASTRO_DB_APP_TOKEN="$ASTRO_DB_APP_TOKEN" \
-            --build-arg PUBLIC_GA_ID="$PUBLIC_GA_ID" \
             .
 
       - name: Export Docker image
