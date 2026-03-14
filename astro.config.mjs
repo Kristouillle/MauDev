@@ -3,7 +3,7 @@ import db from '@astrojs/db';
 import node from '@astrojs/node';
 
 export default defineConfig({
-  site: 'http://localhost:4321/',
+  site: 'https://kshtech.ca/',
   output: 'server',
   integrations: [db()],
   adapter: node({
