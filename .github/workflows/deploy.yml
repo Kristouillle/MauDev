@@ -2,7 +2,7 @@ name: Deploy MauDev Website (Astro)
 
 on:
   push:
-    branches: [ qa ]
+    branches: [ main ]
   workflow_dispatch:
 
 concurrency:
