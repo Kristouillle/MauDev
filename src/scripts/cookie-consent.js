@@ -1,6 +1,4 @@
-import { actions } from "astro:actions";
-
-const GA_ID = import.meta.env.PUBLIC_GA_ID;
+const GA_ID = "import.meta.env.PUBLIC_GA_ID";
 
 const CONSENT_KEY = "site-consent";
 const CONSENT_SYNC = `${CONSENT_KEY}-SYNC`;
@@ -52,12 +50,17 @@ function buildConsentFormData({ gaConsent, ipConsent }) {
   return formData;
 }
 
-async function sendConsentToServer(formData) {
-  const result = await Astro.callAction(actions.addConsent(formData));
 
-  if (result?.error) {
-    console.error("Consent: server rejected payload", result.error);
-    throw result.error;
+async function sendConsentToServer(formData) {
+  const res = await fetch("/_actions/addConsent", {
+    method: "POST",
+    headers: { Accept: "application/json" },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`Consent: server rejected payload (${res.status}) ${text}`);
   }
 }
 
