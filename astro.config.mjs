@@ -6,5 +6,8 @@ export default defineConfig({
   site: 'http://localhost:4321/',
   output: 'server',
   integrations: [db()],
-  adapter: node({ mode: 'standalone' }),
+  adapter: node({
+    mode: 'standalone',
+    staticHeaders: true,
+  }),
 });

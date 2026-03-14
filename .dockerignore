@@ -11,6 +11,4 @@ compose.yml
 conf
 .nginx
 maudev-image.tar.gz
-.deploy.env
-key.pem
-key.pub
+
