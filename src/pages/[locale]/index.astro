@@ -2,7 +2,7 @@
 import CookieBanner from '../../components/CookieBanner.astro';
 import Home from '../../components/Home.astro';
 import Navbar from '../../components/Navbar.astro';
-import type { Locale } from '../../data/siteContent';
+import { isLocale, type Locale } from '../../data/siteContent';
 import PageLayout from '../../layouts/PageLayout.astro';
 
 export function getStaticPaths() {
@@ -10,12 +10,14 @@ export function getStaticPaths() {
 }
 
 
-const { locale } = Astro.params as { locale: Locale };
+const locale: Locale = isLocale(Astro.params.locale)
+  ? Astro.params.locale
+  : 'en';
 const pageTitle = locale === 'fr' ? 'Presentation | MauDev' : 'Overview | MauDev';
 ---
 
 <PageLayout locale={locale} title={pageTitle}>
-  <Navbar locale={locale} theme="dark" overlay={true} />
+  <Navbar locale={locale} overlay={true} />
   <Home locale={locale} />
   <CookieBanner locale={locale} />
 </PageLayout>

@@ -96,6 +96,10 @@ export const initConsent = () => {
     saveBtn.disabled = busy;
   };
 
+  const hideBanner = () => {
+    banner.hidden = true;
+  };
+
   const openSettings = () => {
     settings.hidden = false;
     saveBtn.hidden = false;
@@ -125,14 +129,18 @@ export const initConsent = () => {
     const syncKey = syncKeyFor({ gaConsent, ipConsent });
     persistChoice({ gaConsent, ipConsent });
 
-    if (localStorage.getItem(CONSENT_SYNC) !== syncKey) {
-      await sendConsentToServer(buildConsentFormData({ gaConsent, ipConsent }));
-      localStorage.setItem(CONSENT_SYNC, syncKey);
-    }
-
     applyConsent(toChoice(gaConsent));
-    banner.hidden = true;
+    hideBanner();
     closeSettings();
+
+    if (localStorage.getItem(CONSENT_SYNC) !== syncKey) {
+      try {
+        await sendConsentToServer(buildConsentFormData({ gaConsent, ipConsent }));
+        localStorage.setItem(CONSENT_SYNC, syncKey);
+      } catch (error) {
+        console.error("Consent: failed to sync with server", error);
+      }
+    }
   };
 
   acceptBtn.addEventListener("click", async () => {

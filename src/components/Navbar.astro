@@ -1,17 +1,24 @@
 ---
 import { pageContent } from '../data/pageContent';
-import type { Locale } from '../data/siteContent';
+import { isLocale, type Locale } from '../data/siteContent';
 
 interface Props {
-  locale: Locale;
-  theme?: 'dark' | 'light';
+  locale?: Locale;
   overlay?: boolean;
 }
 
-const { locale, theme = 'light', overlay = false } = Astro.props;
-const text = pageContent[locale].nav;
+const { overlay = false } = Astro.props as Props;
+const locale: Locale = isLocale(Astro.props.locale)
+  ? Astro.props.locale
+  : Astro.url.pathname.startsWith('/fr')
+    ? 'fr'
+    : 'en';
+
+const text = pageContent[locale]?.nav ?? pageContent.en.nav;
 const alternateLocale = locale === 'fr' ? 'en' : 'fr';
-const alternatePath = Astro.url.pathname.replace(`/${locale}`, `/${alternateLocale}`) || `/${alternateLocale}`;
+const alternatePath = /^\/(fr|en)(?=\/|$)/.test(Astro.url.pathname)
+  ? Astro.url.pathname.replace(/^\/(fr|en)(?=\/|$)/, `/${alternateLocale}`)
+  : `/${alternateLocale}`;
 
 const links = [
   { href: `/${locale}/projects`, label: text.projects },
@@ -19,7 +26,7 @@ const links = [
 ];
 ---
 
-<header class:list={['nav', `nav--${theme}`, overlay && 'nav--overlay']}>
+<header class:list={['nav', 'nav--light', overlay && 'nav--overlay']}>
   <div class="width nav__inner">
     <a class="nav__brand" href={`/${locale}`}>MauDev</a>
     <nav>

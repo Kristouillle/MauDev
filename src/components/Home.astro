@@ -1,13 +1,18 @@
 ---
 import { homeAssets, pageContent } from '../data/pageContent';
-import type { Locale } from '../data/siteContent';
+import { isLocale, type Locale } from '../data/siteContent';
 
 interface Props {
-  locale: Locale;
+  locale?: Locale;
 }
 
-const { locale } = Astro.props;
-const text = pageContent[locale].home;
+const locale: Locale = isLocale(Astro.props.locale)
+  ? Astro.props.locale
+  : Astro.url.pathname.startsWith('/fr')
+    ? 'fr'
+    : 'en';
+
+const text = pageContent[locale]?.home ?? pageContent.en.home;
 const tickerItems = [...text.tickerItems, ...text.tickerItems];
 ---
 
