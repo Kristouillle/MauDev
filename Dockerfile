@@ -7,6 +7,11 @@ WORKDIR /app
 # Installer les dépendances
 COPY package.json package-lock.json ./
 RUN npm ci
+ARG ASTRO_DB_REMOTE_URL
+ARG ASTRO_DB_APP_TOKEN
+
+ENV ASTRO_DB_REMOTE_URL=${ASTRO_DB_REMOTE_URL}
+ENV ASTRO_DB_APP_TOKEN=${ASTRO_DB_APP_TOKEN}
 
 # Copier le code et builder
 COPY . .
