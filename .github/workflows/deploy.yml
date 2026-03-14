@@ -45,53 +45,23 @@ jobs:
           done
 
       # -------------------------
-      # NODE + BUILD
-      # -------------------------
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Astro project
-        env:
-          ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
-          ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
-          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
-        run: npm run build
-
-      # -------------------------
       # BUILD IMAGE (EXPORT TO VM)
       # -------------------------
 
       - name: Build Docker image
-        run: docker build -t maudev:latest .
+        env:
+          ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
+          ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
+        run: |
+          docker build -t maudev:latest \
+            --build-arg ASTRO_DB_REMOTE_URL="$ASTRO_DB_REMOTE_URL" \
+            --build-arg ASTRO_DB_APP_TOKEN="$ASTRO_DB_APP_TOKEN" \
+            --build-arg PUBLIC_GA_ID="$PUBLIC_GA_ID" \
+            .
 
       - name: Export Docker image
         run: docker save maudev:latest | gzip > maudev-image.tar.gz
-
-      # -------------------------
-      # INSTALL TOOLS (LINODE)
-      # -------------------------
-
-      # - name: Setup Python
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: "3.12"
-
-      # - name: Install jq
-      #   run: sudo apt-get update && sudo apt-get install -y jq
-
-      # - name: Install Linode CLI
-      #   run: pip install linode-cli --upgrade
-
-      # -------------------------
-      # UPLOAD DEPLOY ASSETS
-      # -------------------------
 
       - name: Prepare remote deploy directory
         run: |

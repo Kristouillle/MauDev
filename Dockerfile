@@ -1,12 +1,24 @@
-FROM node:20-slim
-
+# Build
+FROM node:23 AS builder
 WORKDIR /app
-ENV NODE_ENV=production
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm ci
 
-COPY dist ./dist
+COPY . .
+
+RUN npm run build
+
+# Runtime SSR
+FROM node:23
+WORKDIR /app
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=4321
+
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
 
 USER node
 EXPOSE 4321
