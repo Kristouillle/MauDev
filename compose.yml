@@ -20,11 +20,6 @@ services:
     image: maudev:latest
     container_name: MauDev
     restart: unless-stopped
-    environment:
-      HOST: 0.0.0.0
-      PORT: 4321
-      ASTRO_DB_REMOTE_URL: ${ASTRO_DB_REMOTE_URL}
-      ASTRO_DB_APP_TOKEN: ${ASTRO_DB_APP_TOKEN}
     ports:
       - "4321:4321"
     networks:
