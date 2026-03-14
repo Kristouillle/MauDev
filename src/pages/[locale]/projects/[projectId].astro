@@ -1,11 +1,11 @@
 ---
 import Navbar from '../../../components/Navbar.astro';
 import { projects, type Project } from '../../../data/projects';
-import type { Locale } from '../../../data/siteContent';
+import { isLocale, type Locale } from '../../../data/siteContent';
 import PageLayout from '../../../layouts/PageLayout.astro';
 
 interface Params {
-  locale: Locale;
+  locale?: string;
   projectId: string;
 }
 
@@ -21,11 +21,17 @@ export function getStaticPaths() {
   );
 }
 
-const { locale, projectId } = Astro.params as Params;
+const { locale: rawLocale, projectId } = Astro.params as Params;
+
+if (!isLocale(rawLocale)) {
+  return new Response(null, { status: 404 });
+}
+
+const locale = rawLocale;
 const project = projects.find((entry) => entry.id === projectId);
 
 if (!project) {
-  throw new Error(`Project not found for id: ${projectId}`);
+  return new Response(null, { status: 404 });
 }
 
 const detailLabels = {

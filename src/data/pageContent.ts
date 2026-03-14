@@ -1,4 +1,6 @@
-import type { Locale } from './siteContent';
+export type Locale = 'fr' | 'en';
+
+export const isLocale = (value: unknown): value is Locale => value === 'fr' || value === 'en';
 
 type PageLocaleContent = {
   nav: {

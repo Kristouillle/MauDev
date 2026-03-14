@@ -53,7 +53,7 @@ function buildConsentFormData({ gaConsent, ipConsent }) {
 }
 
 async function sendConsentToServer(formData) {
-  const result = await actions.addConsent(formData);
+  const result = await Astro.callAction(actions.addConsent(formData));
 
   if (result?.error) {
     console.error("Consent: server rejected payload", result.error);

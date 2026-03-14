@@ -14,6 +14,7 @@ env:
   CURRENT_ENV: "test"
   VM_LABEL: "vm-maudev-01-test"
   DEPLOY_DIR: "/root/maudev"
+  VM_IP: ${{ secrets.IP }}
 
 jobs:
   deploy:
@@ -35,7 +36,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          required=(LINODE_TOKEN VM_PASSWORD PR_SSH_KEY ASTRO_DB_REMOTE_URL ASTRO_DB_APP_TOKEN)
+          required=(PR_SSH_KEY VM_IP ASTRO_DB_REMOTE_URL ASTRO_DB_APP_TOKEN)
           for name in "${required[@]}"; do
             if [ -z "${!name:-}" ]; then
               echo "Missing required secret: $name" >&2
@@ -44,89 +45,27 @@ jobs:
           done
 
       # -------------------------
-      # NODE + BUILD
-      # -------------------------
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Astro project
-        env:
-          ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
-          ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
-          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
-        run: npm run build
-
-      # -------------------------
       # BUILD IMAGE (EXPORT TO VM)
       # -------------------------
 
       - name: Build Docker image
-        run: docker build -t maudev:latest .
-
+        env:
+          ASTRO_DB_REMOTE_URL: ${{ secrets.ASTRO_DB_REMOTE_URL }}
+          ASTRO_DB_APP_TOKEN: ${{ secrets.ASTRO_DB_APP_TOKEN }}
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
+        run: |
+          docker build -t maudev:latest --build-arg ASTRO_DB_REMOTE_URL="$ASTRO_DB_REMOTE_URL" --build-arg ASTRO_DB_APP_TOKEN="$ASTRO_DB_APP_TOKEN" .
       - name: Export Docker image
         run: docker save maudev:latest | gzip > maudev-image.tar.gz
 
-      # -------------------------
-      # INSTALL TOOLS (LINODE)
-      # -------------------------
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Install Linode CLI
-        run: pip install linode-cli --upgrade
-
-      # -------------------------
-      # SSH KEY
-      # -------------------------
-
-      - name: Prepare SSH key
+      - name: Prepare remote deploy directory
         run: |
-          set -euo pipefail
-
           cat > key.pem <<'EOF'
           ${{ secrets.PR_SSH_KEY }}
           EOF
           chmod 600 key.pem
 
-          ssh-keygen -y -f key.pem > key.pub
-          echo "PUBKEY=$(cat key.pub)" >> "$GITHUB_ENV"
-
-
-
-      # -------------------------
-      # CREATE VM IF NEEDED
-      # -------------------------
-
-      - name: Ensure Linode VM exists
-        id: vm
-        run: |
-          set -euo pipefail
-          EXISTING=$(linode-cli linodes list --label "${{ env.VM_LABEL }}" --json)
-          IP=$(echo "$EXISTING" | jq -r '.[0].ipv4[0]')
-          echo "ip=$IP" >> "$GITHUB_OUTPUT"
-          echo "IP=$IP" >> "$GITHUB_ENV"
-          echo "Server IP: $IP"
-
-      # -------------------------
-      # UPLOAD DEPLOY ASSETS
-      # -------------------------
-
-      - name: Prepare remote deploy directory
-        run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ steps.vm.outputs.ip }} "mkdir -p '$DEPLOY_DIR'"
+          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ env.VM_IP }} "mkdir -p '$DEPLOY_DIR'"
 
       - name: Create runtime env file
         run: |
@@ -137,10 +76,11 @@ jobs:
 
       - name: Upload deploy assets
         run: |
-          scp -o StrictHostKeyChecking=no -i key.pem compose.yml root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/compose.yml"
-          scp -o StrictHostKeyChecking=no -i key.pem maudev-image.tar.gz root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/maudev-image.tar.gz"
-          scp -o StrictHostKeyChecking=no -i key.pem .deploy.env root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/.env"
-          scp -o StrictHostKeyChecking=no -i key.pem -r conf root@${{ steps.vm.outputs.ip }}:"$DEPLOY_DIR/"
+          chmod 600 key.pem
+          scp -o StrictHostKeyChecking=no -i key.pem compose.yml root@${{ env.VM_IP }}:"$DEPLOY_DIR/compose.yml"
+          scp -o StrictHostKeyChecking=no -i key.pem maudev-image.tar.gz root@${{ env.VM_IP }}:"$DEPLOY_DIR/maudev-image.tar.gz"
+          scp -o StrictHostKeyChecking=no -i key.pem .deploy.env root@${{ env.VM_IP }}:"$DEPLOY_DIR/.env"
+          scp -o StrictHostKeyChecking=no -i key.pem -r conf root@${{ env.VM_IP }}:"$DEPLOY_DIR/"
 
       # -------------------------
       # DEPLOY
@@ -148,7 +88,7 @@ jobs:
 
       - name: Deploy application
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ steps.vm.outputs.ip }} << 'ENDSSH'
+          ssh -o StrictHostKeyChecking=no -i key.pem root@${{ env.VM_IP }} << 'ENDSSH'
           set -euo pipefail
 
           cd /root/maudev
