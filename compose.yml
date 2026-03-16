@@ -23,6 +23,8 @@ services:
     environment:
       ASTRO_DB_REMOTE_URL: ${ASTRO_DB_REMOTE_URL}
       ASTRO_DB_APP_TOKEN: ${ASTRO_DB_APP_TOKEN}
+      PUBLIC_GA_ID: ${PUBLIC_GA_ID}
+      PUBLIC_SITE: ${PUBLIC_SITE}
       
     ports:
       - "4321:4321"
