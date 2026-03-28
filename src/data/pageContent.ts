@@ -50,8 +50,6 @@ type PageLocaleContent = {
 };
 
 export const homeAssets = {
-  bgVideo: 'https://www.figma.com/api/mcp/asset/e0d71555-63a9-4aa0-b6ae-0e99bf006842',
-  projectImage: 'https://www.figma.com/api/mcp/asset/48bc5c3e-7c4b-4ad8-a460-d4f2e34a16c4',
   iconMask1: '/images/blueprint.png',
   iconMask2: '/images/investment.png',
   iconMask3: '/images/construction.png',
