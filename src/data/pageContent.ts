@@ -52,10 +52,10 @@ type PageLocaleContent = {
 export const homeAssets = {
   bgVideo: 'https://www.figma.com/api/mcp/asset/e0d71555-63a9-4aa0-b6ae-0e99bf006842',
   projectImage: 'https://www.figma.com/api/mcp/asset/48bc5c3e-7c4b-4ad8-a460-d4f2e34a16c4',
-  iconMask1: 'https://www.figma.com/api/mcp/asset/db2d8980-7e45-4a4d-92ca-8c34b9e649e9',
-  iconMask2: 'https://www.figma.com/api/mcp/asset/d104c0c1-b6aa-4f8a-b892-ffa1edc176c5',
-  iconMask3: 'https://www.figma.com/api/mcp/asset/59526fa9-1678-4fae-9b1a-33689b843572',
-  iconMask4: 'https://www.figma.com/api/mcp/asset/7cdd7fdb-a714-4d18-87c2-664c8afe824e'
+  iconMask1: '/images/blueprint.png',
+  iconMask2: '/images/investment.png',
+  iconMask3: '/images/construction.png',
+  iconMask4: '/images/cashout.png'
 } as const;
 
 export const pageContent: Record<Locale, PageLocaleContent> = {

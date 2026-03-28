@@ -14,7 +14,7 @@ export const siteContent = {
       { href: '/fr/contact', label: 'Contact' }
     ],
     home: {
-      title: 'Construire avec vision.',
+      title: 'Construire avec excellence, louer avec confiance',
       meta_description:'MauDev est un développeur immobilier axé sur la durabilité et l’impact positif.',
       intro:'Nous créons des projets immobiliers durables qui inspirent confiance aux investisseurs et aux communautés.'
     },
@@ -63,7 +63,7 @@ export const siteContent = {
       { href: '/en/contact', label: 'Contact' }
     ],
     home: {
-      title: 'Building with vision.',
+      title: 'Build excelent, rent with confidence',
       meta_description:'MauDev is a real estate developer focused on sustainability and positive impact.',
       intro:
         'We develop sustainable real-estate projects that inspire confidence for investors and communities.'

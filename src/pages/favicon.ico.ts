@@ -4,7 +4,7 @@ export const GET: APIRoute = () =>
   new Response(null, {
     status: 302,
     headers: {
-      Location: '/favicon.svg'
+      Location: '/images/maudev.ico'
     }
   });
 

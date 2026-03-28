@@ -18,7 +18,19 @@ const tickerItems = [...text.tickerItems, ...text.tickerItems];
 
 <section class="home">
   <section class="hero" data-node-id="71:16">
-    <img src={homeAssets.bgVideo} alt="" class="hero__bg" />
+    <video
+      class="hero__bg"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      aria-hidden="true"
+      disablepictureinpicture
+      disableremoteplayback
+    >
+      <source src="/videos/Rook_bird.mov" />
+    </video>
     <div class="hero__shade"></div>
 
     <div class="width hero__menu" data-node-id="71:29">
@@ -58,7 +70,7 @@ const tickerItems = [...text.tickerItems, ...text.tickerItems];
           <article class="step-card reveal-on-scroll" style={`--reveal-delay:${220 + index * 120}ms;`}>
             <h3>
               <span class="step-icon" style={`--mask:url('${step.iconMask}')`}></span>
-              {index + 1}. {step.title}
+              <span class="step-card__title">{index + 1}. {step.title}</span>
             </h3>
             <p>{step.body}</p>
           </article>

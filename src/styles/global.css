@@ -394,12 +394,17 @@ body.body {
 }
 
 .step-card h3 {
-  align-items: center;
-  display: flex;
-  font-size: clamp(2.15rem, 3.2vw, 2.9rem);
+  align-items: start;
+  column-gap: 0.65rem;
+  display: grid;
+  font-size: clamp(2rem, 3vw, 2.75rem);
   font-weight: 400;
-  gap: 0.65rem;
+  grid-template-columns: auto 1fr;
   margin: 0 0 1.2rem;
+}
+
+.step-card__title {
+  display: block;
 }
 
 .step-card p {
@@ -410,9 +415,11 @@ body.body {
 }
 
 .step-icon {
+  align-self: start;
   background: #d9d9d9;
   display: inline-block;
   height: 42px;
+  margin-top: 0.18em;
   mask: var(--mask) center / contain no-repeat;
   width: 46px;
   -webkit-mask: var(--mask) center / contain no-repeat;
