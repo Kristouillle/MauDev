@@ -36,25 +36,11 @@ if (!project) {
 
 const detailLabels = {
   fr: {
-    yearBuilt: 'Annee',
-    sqFt: 'Pi.ca',
-    type: 'Type',
-    tenant: 'Locataire',
-    status: 'Statut',
-    details: 'Details',
-    owner: 'Proprietaire',
-    manager: 'Gestion',
+    details: 'Aperçu',
     back: 'Retour aux projets'
   },
   en: {
-    yearBuilt: 'Year built',
-    sqFt: 'Sq. ft.',
-    type: 'Type',
-    tenant: 'Tenant',
-    status: 'Status',
-    details: 'Details',
-    owner: 'Owner',
-    manager: 'Managed by',
+    details: 'Overview',
     back: 'Back to projects'
   }
 } as const;
@@ -62,11 +48,14 @@ const detailLabels = {
 const text = detailLabels[locale];
 const readLocalized = (value: Project['addressNumber']) =>
   typeof value === 'string' ? value : value[locale];
-
-const pageTitle = `${readLocalized(project.addressNumber)} ${readLocalized(project.addressStreet)} | MauDev`;
-const formattedSqFt = new Intl.NumberFormat(locale === 'fr' ? 'fr-CA' : 'en-CA').format(
-  Number(project.squareFeet)
-);
+const addressNumber = readLocalized(project.addressNumber).trim();
+const addressStreet = readLocalized(project.addressStreet).trim();
+const fullAddress = [addressNumber, addressStreet].filter(Boolean).join(' ');
+const pageTitle = `${fullAddress} | MauDev`;
+const projectFacts = project.facts.map((item) => ({
+  label: item.label[locale],
+  value: typeof item.value === 'string' ? item.value : item.value[locale]
+}));
 ---
 
 <PageLayout locale={locale} title={pageTitle}>
@@ -77,33 +66,23 @@ const formattedSqFt = new Intl.NumberFormat(locale === 'fr' ? 'fr-CA' : 'en-CA')
 
       <p class="project-detail-page__location">{project.city[locale]}, {project.province[locale]}</p>
       <h1>
-        <span>{readLocalized(project.addressNumber)}</span>
-        <span>{readLocalized(project.addressStreet)}</span>
+        {addressNumber && <span>{addressNumber}</span>}
+        <span>{addressStreet}</span>
       </h1>
 
       <dl class="project-detail-page__facts">
-        <dt>{text.yearBuilt}</dt>
-        <dd>{project.yearBuilt}</dd>
-
-        <dt>{text.sqFt}</dt>
-        <dd>{formattedSqFt}</dd>
-
-        <dt>{text.type}</dt>
-        <dd>{project.propertyType[locale]}</dd>
-
-        <dt>{text.tenant}</dt>
-        <dd>{project.tenant[locale]}</dd>
-
-        <dt>{text.status}</dt>
-        <dd>{project.status[locale]}</dd>
+        {projectFacts.map((item) => (
+          <>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </>
+        ))}
       </dl>
 
       <section class="project-detail-page__copy" aria-label={text.details}>
         <h2>{text.details}</h2>
         <p>{project.detailsIntro[locale]}</p>
         <p>{project.detailsBody[locale]}</p>
-        <p>{text.owner}: {project.owner[locale]}</p>
-        <p>{text.manager}: {project.manager[locale]}</p>
       </section>
 
       <a class="project-detail-page__back" data-crossfade-link href={`/${locale}/projects`}>{text.back}</a>

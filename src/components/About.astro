@@ -8,7 +8,11 @@ interface Props {
 
 const { locale } = Astro.props;
 const text = pageContent[locale].about;
-const capitalCounterTarget = 64;
+const capitalMatch = text.capitalValue.match(/^([0-9]+(?:[.,][0-9]+)?)(.*)$/u);
+const capitalCounterTarget = capitalMatch
+  ? Number.parseFloat(capitalMatch[1].replace(',', '.'))
+  : null;
+const capitalCounterSuffix = capitalMatch?.[2] ?? '';
 ---
 
 <section class="about" data-node-id="136:428">
@@ -21,9 +25,10 @@ const capitalCounterTarget = 64;
       <p>{text.capitalLabel}</p>
       <strong
         class="about__capital-value"
-        data-counter-target={String(capitalCounterTarget)}
+        data-counter-target={capitalCounterTarget === null ? undefined : String(capitalCounterTarget)}
+        data-counter-suffix={capitalCounterSuffix}
       >
-        0m$
+        {capitalCounterTarget === null ? text.capitalValue : `0${capitalCounterSuffix}`}
       </strong>
     </div>
   </section>
@@ -111,9 +116,13 @@ const capitalCounterTarget = 64;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const revealContainer = counter.closest('.about__capital');
-    const target = Number(counter.dataset.counterTarget ?? 0);
+    const target = Number(counter.dataset.counterTarget ?? Number.NaN);
+    const suffix = counter.dataset.counterSuffix ?? '';
     const duration = 750;
-    const formatValue = (value) => `${Math.round(value)}m$`;
+    const formatValue = (value) => `${Math.round(value)}${suffix}`;
+
+    if (Number.isNaN(target)) return;
+
     counter.textContent = formatValue(0);
 
     const toMilliseconds = (timeValue) => {

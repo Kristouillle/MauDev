@@ -13,7 +13,9 @@ export function getStaticPaths() {
 const locale: Locale = isLocale(Astro.params.locale)
   ? Astro.params.locale
   : 'en';
-const pageTitle = locale === 'fr' ? 'Presentation | MauDev' : 'Overview | MauDev';
+const pageTitle = locale === 'fr'
+  ? 'Développement immobilier et construction intégrée | MauDev'
+  : 'Real Estate Development & Integrated Construction | MauDev';
 ---
 
 <PageLayout locale={locale} title={pageTitle}>

@@ -5,6 +5,11 @@ export type LocalizedText = {
 
 export type LocalizedOrPlainText = LocalizedText | string;
 
+export type ProjectFact = {
+  label: LocalizedText;
+  value: LocalizedOrPlainText;
+};
+
 export type Project = {
   id: string;
   category: LocalizedText;
@@ -13,395 +18,395 @@ export type Project = {
   addressNumber: LocalizedOrPlainText;
   addressStreet: LocalizedOrPlainText;
   title: LocalizedText;
-  yearBuilt: string;
-  squareFeet: string;
-  propertyType: LocalizedText;
-  tenant: LocalizedText;
   status: LocalizedText;
   detailsIntro: LocalizedText;
   detailsBody: LocalizedText;
-  owner: LocalizedText;
-  manager: LocalizedText;
+  facts: ProjectFact[];
   gallery: string[];
 };
 
-const seededGallery = (seed: string) =>
-  [1, 2, 3].map((index) => `https://picsum.photos/seed/${seed}-${index}/1600/1100`);
+const same = (value: string): LocalizedText => ({ fr: value, en: value });
+
+const fact = (frLabel: string, enLabel: string, value: LocalizedOrPlainText): ProjectFact => ({
+  label: { fr: frLabel, en: enLabel },
+  value
+});
+
+const delivered = { fr: 'Livré', en: 'Delivered' };
+const inDevelopment = { fr: 'À venir', en: 'Upcoming' };
+
+const projectGalleryMap = {
+  '110-alphonse-desjardins': ['/images/projects/110-alphonse-desjardins.jpg'],
+  '94-saint-louis': ['/images/projects/94-saint-louis.jpg'],
+  '145-salaberry': ['/images/projects/145-salaberry.jpg'],
+  'pierre-paul-messier': ['/images/projects/pierre-paul-messier.jpg'],
+  '47-nicholson': ['/images/projects/47-nicholson.jpg'],
+  '5515-pierre-dansereau': ['/images/projects/5515-pierre-dansereau.jpg'],
+  '5593-pierre-dansereau': ['/images/projects/5593-pierre-dansereau.jpg'],
+  '2055-61-chemin-ridge': ['/images/projects/2055-61-chemin-ridge.jpg'],
+  '4a-b-henderson': ['/images/projects/4a-b-henderson.jpg'],
+  '110-ste-cecile': ['/images/projects/110-ste-cecile.jpg'],
+  '142-saint-joseph': ['/images/projects/142-saint-joseph.jpg'],
+  '19-hermine': ['/images/projects/19-hermine.jpg'],
+  '116-saint-jean-baptiste': ['/images/projects/116-saint-jean-baptiste.jpg'],
+  '82-90-dalhousie': ['/images/projects/82-90-dalhousie.jpg']
+} as const;
+
+const gallery = (id: keyof typeof projectGalleryMap) => [...projectGalleryMap[id]];
 
 export const projects: Project[] = [
   {
-    id: 'griffintown-lofts',
-    category: { fr: 'Montréal', en: 'Montreal' },
-    city: { fr: 'Montreal', en: 'Montreal' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '2152',
-    addressStreet: 'De la Montagne',
-    title: { fr: 'Lofts Griffintown', en: 'Griffintown Lofts' },
-    yearBuilt: '1870',
-    squareFeet: '6175',
-    propertyType: { fr: 'Commerce de rue', en: 'Highstreet Retail' },
-    tenant: { fr: 'Suit Supply', en: 'Suit Supply' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '110-alphonse-desjardins',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '110',
+    addressStreet: same('Alphonse-Desjardins'),
+    title: same('110 Alphonse-Desjardins'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Cet immeuble est situe sur la rue de la Montagne au coeur du centre-ville.',
-      en: 'This building is located on De la Montagne Street in downtown Montreal.'
+      fr: 'Projet résidentiel livré à Salaberry-de-Valleyfield.',
+      en: 'Completed residential project in Salaberry-de-Valleyfield.'
     },
     detailsBody: {
-      fr: 'Construit en 1870 et modernise recemment, le site se distingue par sa facade et son ancrage commercial.',
-      en: 'Built in 1870 and recently modernized, the property stands out through its facade and strong retail frontage.'
+      fr: 'Un immeuble résidentiel compact de 23 unités qui s\'inscrit dans la présence croissante de MauDev à Valleyfield.',
+      en: 'A compact 23-unit residential building that strengthens MauDev\'s growing presence in Valleyfield.'
     },
-    owner: { fr: '9352-8198 Quebec Inc.', en: '9352-8198 Quebec Inc.' },
-    manager: { fr: 'Keystone Building Management', en: 'Keystone Building Management' },
-    gallery: seededGallery('griffintown-lofts')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Programme', 'Program', { fr: 'Résidentiel', en: 'Residential' }),
+      fact('Bâtiments', 'Buildings', '1'),
+      fact('Unités résidentielles', 'Residential units', '23')
+    ],
+    gallery: gallery('110-alphonse-desjardins')
   },
   {
-    id: 'mile-end-hub',
-    category: { fr: 'Montréal', en: 'Montreal' },
-    city: { fr: 'Montréal', en: 'Montreal' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '1181',
-    addressStreet: 'De la Montagne',
-    title: { fr: 'Pavillon Mile-End', en: 'Mile End Hub' },
-    yearBuilt: '1928',
-    squareFeet: '12400',
-    propertyType: { fr: 'Bureaux + commerce', en: 'Office + Retail' },
-    tenant: { fr: 'Locataires multiples', en: 'Multi-tenant' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '94-saint-louis',
+    category: same('Saint-Eustache'),
+    city: same('Saint-Eustache'),
+    province: same('QC'),
+    addressNumber: '94',
+    addressStreet: same('Saint-Louis'),
+    title: same('94 Saint-Louis'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Le projet transforme un volume industriel en destination creative.',
-      en: 'The project transforms an industrial shell into a creative destination.'
+      fr: 'Projet mixte livré à Saint-Eustache.',
+      en: 'Completed mixed-use project in Saint-Eustache.'
     },
     detailsBody: {
-      fr: 'Le programme combine ateliers, bureaux et commerces de proximite avec une exploitation flexible.',
-      en: 'The program combines studios, offices, and neighborhood retail with flexible operations.'
+      fr: 'Un petit immeuble mixte réunissant 6 logements et 2 espaces commerciaux dans un format de proximité.',
+      en: 'A small mixed-use building bringing together 6 homes and 2 commercial spaces in a neighborhood-scale format.'
     },
-    owner: { fr: 'MauDev', en: 'MauDev' },
-    manager: { fr: 'Equipe interne', en: 'In-house team' },
-    gallery: seededGallery('mile-end-hub')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Programme', 'Program', { fr: 'Mixte', en: 'Mixed-use' }),
+      fact('Bâtiments', 'Buildings', '1'),
+      fact('Logements', 'Residential units', '6'),
+      fact('Espaces commerciaux', 'Commercial spaces', '2')
+    ],
+    gallery: gallery('94-saint-louis')
   },
   {
-    id: 'plateau-courtyard',
-    category: { fr: 'Montréal', en: 'Montreal' },
-    city: { fr: 'Montréal', en: 'Montreal' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '1500',
-    addressStreet: 'De Maisonneuve',
-    title: { fr: 'Cours du Plateau', en: 'Plateau Courtyard' },
-    yearBuilt: '1996',
-    squareFeet: '9800',
-    propertyType: { fr: 'Residentiel locatif', en: 'Rental Residential' },
-    tenant: { fr: 'Residents', en: 'Residents' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '145-salaberry',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '145',
+    addressStreet: same('Salaberry'),
+    title: same('145 Salaberry'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Immeuble de moyenne hauteur avec cour commune et commerces animes.',
-      en: 'Mid-rise building with a shared courtyard and active storefronts.'
+      fr: 'Actif mixte livré à Salaberry-de-Valleyfield.',
+      en: 'Completed mixed-use asset in Salaberry-de-Valleyfield.'
     },
     detailsBody: {
-      fr: 'La performance energetique est renforcee par une enveloppe revue et une toiture vegetale.',
-      en: 'Energy performance is reinforced through envelope upgrades and a green roof.'
+      fr: 'Un actif mixte qui combine une base résidentielle dense à une composante commerciale de 10 000 pi².',
+      en: 'A mixed-use asset that combines a dense residential base with 10,000 sq. ft. of commercial area.'
     },
-    owner: { fr: 'MauDev', en: 'MauDev' },
-    manager: { fr: 'MauDev Operations', en: 'MauDev Operations' },
-    gallery: seededGallery('plateau-courtyard')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Programme', 'Program', { fr: 'Mixte', en: 'Mixed-use' }),
+      fact('Logements', 'Residential units', '41'),
+      fact('Surface commerciale', 'Commercial area', { fr: '10 000 pi²', en: '10,000 sq. ft.' })
+    ],
+    gallery: gallery('145-salaberry')
   },
   {
-    id: 'atwater-commons',
-    category: { fr: 'Montréal', en: 'Montreal' },
-    city: { fr: 'Montréal', en: 'Montreal' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '44',
-    addressStreet: 'Saint-Antoine',
-    title: { fr: 'Communes Atwater', en: 'Atwater Commons' },
-    yearBuilt: '2008',
-    squareFeet: '10250',
-    propertyType: { fr: 'Mixte', en: 'Mixed-use' },
-    tenant: { fr: 'Locataires multiples', en: 'Multi-tenant' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: 'pierre-paul-messier',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '',
+    addressStreet: same('Pierre-Paul Messier'),
+    title: same('Pierre-Paul Messier'),
+    status: { fr: '2 phases livrées', en: '2 phases delivered' },
     detailsIntro: {
-      fr: 'Projet urbain combinant logements et services de proximite.',
-      en: 'Urban project combining housing and local services.'
+      fr: 'Projet phasé à Salaberry-de-Valleyfield.',
+      en: 'Phased project in Salaberry-de-Valleyfield.'
     },
     detailsBody: {
-      fr: 'La programmation integre une place pietonne et un pole communautaire.',
-      en: 'The program integrates a pedestrian plaza and community hub.'
+      fr: 'Un développement résidentiel phasé conçu pour croître sur plusieurs bâtiments, avec deux phases déjà complétées.',
+      en: 'A phased residential development designed to scale across multiple buildings, with two phases already completed.'
     },
-    owner: { fr: 'Fonds Atwater', en: 'Atwater Fund' },
-    manager: { fr: 'Equipe locale', en: 'Local team' },
-    gallery: seededGallery('atwater-commons')
+    facts: [
+      fact('Statut', 'Status', { fr: '2 phases livrées', en: '2 phases delivered' }),
+      fact('Programme', 'Program', { fr: 'Résidentiel phasé', en: 'Phased residential' }),
+      fact('Bâtiments', 'Buildings', '6'),
+      fact('Unités par phase', 'Units per phase', '32'),
+      fact('Phases terminées', 'Completed phases', '2')
+    ],
+    gallery: gallery('pierre-paul-messier')
   },
   {
-    id: 'old-port-terraces',
-    category: { fr: 'Quebec City', en: 'Quebec City' },
-    city: { fr: 'Quebec City', en: 'Quebec City' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '733',
-    addressStreet: 'Cathcart',
-    title: { fr: 'Terrasses du Vieux-Port', en: 'Old Port Terraces' },
-    yearBuilt: '2012',
-    squareFeet: '11400',
-    propertyType: { fr: 'Residentiel haut de gamme', en: 'Premium Residential' },
-    tenant: { fr: 'Residents', en: 'Residents' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '47-nicholson',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '47',
+    addressStreet: same('Nicholson'),
+    title: same('47 Nicholson'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Ensemble residentiel avec terrasses et vues sur le fleuve.',
-      en: 'Residential complex with terraces and river views.'
+      fr: 'Actif rénové dans le portefeuille de projets antérieurs de MauDev.',
+      en: 'Renovated asset within MauDev\'s completed-project portfolio.'
     },
     detailsBody: {
-      fr: 'Le rez-de-chaussee anime accueille des commerces de quartier.',
-      en: 'The active ground floor hosts neighborhood-facing retail.'
+      fr: 'Un bâtiment existant repositionné grâce à une rénovation réalisée en 2022.',
+      en: 'An existing building repositioned through a renovation completed in 2022.'
     },
-    owner: { fr: 'Quebec City Holdings', en: 'Quebec City Holdings' },
-    manager: { fr: 'Riverfront Management', en: 'Riverfront Management' },
-    gallery: seededGallery('old-port-terraces')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Bâtiments', 'Buildings', '1'),
+      fact('Surface du bâtiment', 'Building area', { fr: '± 12 000 pi²', en: '± 12,000 sq. ft.' }),
+      fact('Échéancier', 'Timeline', { fr: 'Rénovation 2022', en: 'Renovation 2022' })
+    ],
+    gallery: gallery('47-nicholson')
   },
   {
-    id: 'saint-roch-exchange',
-    category: { fr: 'Quebec City', en: 'Quebec City' },
-    city: { fr: 'Quebec City', en: 'Quebec City' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '1260',
-    addressStreet: 'Crescent',
-    title: { fr: 'Carrefour Saint-Roch', en: 'Saint Roch Exchange' },
-    yearBuilt: '1979',
-    squareFeet: '12600',
-    propertyType: { fr: 'Bureaux + services', en: 'Office + Services' },
-    tenant: { fr: 'Locataires institutionnels', en: 'Institutional Tenants' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '5515-pierre-dansereau',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '5515',
+    addressStreet: same('Pierre-Dansereau'),
+    title: same('5515 Pierre-Dansereau'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Requalification d un ilot majeur en coeur de quartier.',
-      en: 'Redevelopment of a key block in the heart of the district.'
+      fr: 'Projet construit à Salaberry-de-Valleyfield dans le volet commercial et industriel de MauDev.',
+      en: 'Constructed project in Salaberry-de-Valleyfield within MauDev\'s commercial and industrial track record.'
     },
     detailsBody: {
-      fr: 'Le projet met l accent sur la mobilite active et les plateaux adaptables.',
-      en: 'The project emphasizes active mobility and adaptable floorplates.'
+      fr: 'Un bâtiment de plus grand gabarit livré en 2023 dans le volet commercial et industriel de MauDev.',
+      en: 'A larger-format building delivered in 2023 within MauDev\'s commercial and industrial portfolio.'
     },
-    owner: { fr: 'SRX Asset', en: 'SRX Asset' },
-    manager: { fr: 'SRX Operations', en: 'SRX Operations' },
-    gallery: seededGallery('saint-roch-exchange')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Bâtiments', 'Buildings', '1'),
+      fact('Surface du bâtiment', 'Building area', { fr: '± 30 000 pi²', en: '± 30,000 sq. ft.' }),
+      fact('Échéancier', 'Timeline', { fr: 'Construction 2023', en: 'Construction 2023' })
+    ],
+    gallery: gallery('5515-pierre-dansereau')
   },
   {
-    id: 'cap-blanc-collection',
-    category: { fr: 'Quebec City', en: 'Quebec City' },
-    city: { fr: 'Quebec City', en: 'Quebec City' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '698',
-    addressStreet: 'Sainte-Catherine',
-    title: { fr: 'Collection Cap-Blanc', en: 'Cap Blanc Collection' },
-    yearBuilt: '1905',
-    squareFeet: '7420',
-    propertyType: { fr: 'Patrimonial converti', en: 'Heritage Conversion' },
-    tenant: { fr: 'Locataires residentiels', en: 'Residential Tenants' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '5593-pierre-dansereau',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '5593',
+    addressStreet: same('Pierre-Dansereau'),
+    title: same('5593 Pierre-Dansereau'),
+    status: { fr: 'Construit en 2025', en: 'Built in 2025' },
     detailsIntro: {
-      fr: 'Conversion de batiments patrimoniaux en residences contemporaines.',
-      en: 'Conversion of heritage buildings into contemporary residences.'
+      fr: 'Projet récent du portefeuille de Salaberry-de-Valleyfield.',
+      en: 'Recent project within the Salaberry-de-Valleyfield portfolio.'
     },
     detailsBody: {
-      fr: 'Les facades historiques ont ete conservees et restaurees.',
-      en: 'Historic facades were preserved and carefully restored.'
+      fr: 'Un projet récent qui étend l\'empreinte de MauDev dans le secteur Pierre-Dansereau.',
+      en: 'A recent project that expands MauDev\'s footprint in the Pierre-Dansereau corridor.'
     },
-    owner: { fr: 'Cap-Blanc Patrimoine', en: 'Cap-Blanc Patrimoine' },
-    manager: { fr: 'Patrimoine Urbain', en: 'Patrimoine Urbain' },
-    gallery: seededGallery('cap-blanc-collection')
+    facts: [
+      fact('Statut', 'Status', { fr: 'Construit en 2025', en: 'Built in 2025' }),
+      fact('Bâtiments', 'Buildings', '1'),
+      fact('Surface du bâtiment', 'Building area', { fr: '± 42 000 pi²', en: '± 42,000 sq. ft.' }),
+      fact('Échéancier', 'Timeline', { fr: 'Construction 2025', en: 'Construction 2025' })
+    ],
+    gallery: gallery('5593-pierre-dansereau')
   },
   {
-    id: 'chomedey-gateway',
-    category: { fr: 'Laval', en: 'Laval' },
-    city: { fr: 'Laval', en: 'Laval' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '954',
-    addressStreet: { fr: 'Sainte-Catherine Ouest', en: 'Sainte-Catherine West' },
-    title: { fr: 'Porte Chomedey', en: 'Chomedey Gateway' },
-    yearBuilt: '2018',
-    squareFeet: '16300',
-    propertyType: { fr: 'Campus tertiaire', en: 'Service Campus' },
-    tenant: { fr: 'Locataires corporatifs', en: 'Corporate Tenants' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '2055-61-chemin-ridge',
+    category: same('Huntingdon'),
+    city: same('Huntingdon'),
+    province: same('QC'),
+    addressNumber: '2055-61',
+    addressStreet: same('Chemin Ridge'),
+    title: same('2055-61 Chemin Ridge'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Campus de services avec acces direct aux axes routiers.',
-      en: 'Service campus with direct access to major roadways.'
+      fr: 'Projet mixte livré à Huntingdon.',
+      en: 'Completed mixed-use project in Huntingdon.'
     },
     detailsBody: {
-      fr: 'Les espaces sont modules pour accueillir des usages evolutifs.',
-      en: 'Spaces are modular to accommodate evolving business uses.'
+      fr: 'Un ensemble mixte qui répartit logements et espaces commerciaux sur quatre bâtiments distincts.',
+      en: 'A mixed-use cluster that distributes homes and commercial space across four distinct buildings.'
     },
-    owner: { fr: 'Chomedey Investments', en: 'Chomedey Investments' },
-    manager: { fr: 'North Axis Property', en: 'North Axis Property' },
-    gallery: seededGallery('chomedey-gateway')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Programme', 'Program', { fr: 'Mixte', en: 'Mixed-use' }),
+      fact('Bâtiments', 'Buildings', '4'),
+      fact('Logements', 'Residential units', '42'),
+      fact('Espaces commerciaux', 'Commercial spaces', '6')
+    ],
+    gallery: gallery('2055-61-chemin-ridge')
   },
   {
-    id: 'laval-riverline',
-    category: { fr: 'Laval', en: 'Laval' },
-    city: { fr: 'Laval', en: 'Laval' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '1449-1455',
-    addressStreet: { fr: 'Sainte-Catherine Ouest', en: 'Sainte-Catherine West' },
-    title: { fr: 'Parc Riverline', en: 'Laval Riverline' },
-    yearBuilt: '2021',
-    squareFeet: '18900',
-    propertyType: { fr: 'Residentiel + commerces', en: 'Residential + Retail' },
-    tenant: { fr: 'Residents + commerces', en: 'Residents + Retail' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '4a-b-henderson',
+    category: same('Huntingdon'),
+    city: same('Huntingdon'),
+    province: same('QC'),
+    addressNumber: '4A-B',
+    addressStreet: same('Henderson'),
+    title: same('4A-B Henderson'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Developpement locatif avec promenade riveraine et commerces de quartier.',
-      en: 'Rental development with riverside promenade and neighborhood retail.'
+      fr: 'Projet résidentiel livré à Huntingdon.',
+      en: 'Completed residential project in Huntingdon.'
     },
     detailsBody: {
-      fr: 'Le plan masse privilegie de grands espaces publics amenages.',
-      en: 'The master plan prioritizes generous, landscaped public spaces.'
+      fr: 'Un projet résidentiel de deux bâtiments dimensionné pour répondre à la demande locative locale.',
+      en: 'A two-building residential project sized to serve local rental demand.'
     },
-    owner: { fr: 'Riverline GP', en: 'Riverline GP' },
-    manager: { fr: 'Riverline Management', en: 'Riverline Management' },
-    gallery: seededGallery('laval-riverline')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Programme', 'Program', { fr: 'Résidentiel', en: 'Residential' }),
+      fact('Bâtiments', 'Buildings', '2'),
+      fact('Unités résidentielles', 'Residential units', '32')
+    ],
+    gallery: gallery('4a-b-henderson')
   },
   {
-    id: 'vieux-longueuil-quarter',
-    category: { fr: 'Longueuil', en: 'Longueuil' },
-    city: { fr: 'Longueuil', en: 'Longueuil' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '1201',
-    addressStreet: { fr: 'Sherbrooke Ouest', en: 'Sherbrooke West' },
-    title: { fr: 'Quartier Vieux-Longueuil', en: 'Old Longueuil Quarter' },
-    yearBuilt: '2004',
-    squareFeet: '10860',
-    propertyType: { fr: 'Mixte de centre-ville', en: 'Downtown Mixed-use' },
-    tenant: { fr: 'Locataires multiples', en: 'Multi-tenant' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '110-ste-cecile',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '110',
+    addressStreet: same('Ste-Cécile'),
+    title: same('110 Ste-Cécile'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Projet mixte implante en coeur de ville.',
-      en: 'Mixed-use development in the downtown core.'
+      fr: 'Projet mixte livré à Salaberry-de-Valleyfield.',
+      en: 'Completed mixed-use project in Salaberry-de-Valleyfield.'
     },
     detailsBody: {
-      fr: 'Le phasage a ete planifie pour maintenir les activites en place.',
-      en: 'Phasing was planned to preserve existing business continuity.'
+      fr: 'Un immeuble mixte qui associe 24 logements à une composante commerciale en rez-de-chaussée.',
+      en: 'A mixed-use building pairing 24 residential units with a ground-floor commercial component.'
     },
-    owner: { fr: 'Vieux-Longueuil Partners', en: 'Vieux-Longueuil Partners' },
-    manager: { fr: 'Centre Core Operations', en: 'Centre Core Operations' },
-    gallery: seededGallery('vieux-longueuil-quarter')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Programme', 'Program', { fr: 'Mixte', en: 'Mixed-use' }),
+      fact('Bâtiments', 'Buildings', '1'),
+      fact('Logements', 'Residential units', '24'),
+      fact('Locaux commerciaux', 'Commercial spaces', '2')
+    ],
+    gallery: gallery('110-ste-cecile')
   },
   {
-    id: 'jacques-cartier-point',
-    category: { fr: 'Longueuil', en: 'Longueuil' },
-    city: { fr: 'Longueuil', en: 'Longueuil' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '1300',
-    addressStreet: { fr: 'Sherbrooke Ouest', en: 'Sherbrooke West' },
-    title: { fr: 'Point Jacques-Cartier', en: 'Jacques Cartier Point' },
-    yearBuilt: '2016',
-    squareFeet: '14150',
-    propertyType: { fr: 'Mixte transit', en: 'Transit-oriented Mixed-use' },
-    tenant: { fr: 'Locataires mixtes', en: 'Mixed Tenancy' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '142-saint-joseph',
+    category: same('Sainte-Martine'),
+    city: same('Sainte-Martine'),
+    province: same('QC'),
+    addressNumber: '142',
+    addressStreet: same('Saint-Joseph'),
+    title: same('142 Saint-Joseph'),
+    status: delivered,
     detailsIntro: {
-      fr: 'Site strategique connecte au reseau metropolitain.',
-      en: 'Strategic site connected to the regional transit network.'
+      fr: 'Projet structuré à Sainte-Martine avec locataire ancré.',
+      en: 'Structured project in Sainte-Martine with an anchor tenant.'
     },
     detailsBody: {
-      fr: 'Le projet regroupe logements, bureaux et services communautaires.',
-      en: 'The project combines housing, offices, and community services.'
+      fr: 'Un projet structuré autour de 12 unités résidentielles, d\'un locataire ancré et d\'une approche de montage créative.',
+      en: 'A structured project built around 12 residential units, an anchor tenant, and a creative deal setup.'
     },
-    owner: { fr: 'JC Point Holdings', en: 'JC Point Holdings' },
-    manager: { fr: 'Transit District Mgmt', en: 'Transit District Mgmt' },
-    gallery: seededGallery('jacques-cartier-point')
+    facts: [
+      fact('Statut', 'Status', delivered),
+      fact('Programme', 'Program', { fr: 'Résidentiel avec locataire ancré', en: 'Residential with anchor tenant' }),
+      fact('Unités résidentielles', 'Residential units', '12'),
+      fact('Locataire', 'Tenant', { fr: 'Caisse Populaire Desjardins', en: 'Caisse Populaire Desjardins' }),
+      fact('Structure', 'Structure', { fr: 'Subdivision du lot initial', en: 'Subdivision of the initial lot' }),
+      fact('Note d\'investissement', 'Investment note', { fr: 'Mise de fonds remboursée (no cash deal)', en: 'Equity reimbursed (no cash deal)' })
+    ],
+    gallery: gallery('142-saint-joseph')
   },
   {
-    id: 'hull-fabric',
-    category: { fr: 'Gatineau', en: 'Gatineau' },
-    city: { fr: 'Hull', en: 'Hull' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '300',
-    addressStreet: 'St-Sacrement',
-    title: { fr: 'Trame Hull', en: 'Hull Fabric' },
-    yearBuilt: '1988',
-    squareFeet: '9650',
-    propertyType: { fr: 'Mixte urbain', en: 'Urban Mixed-use' },
-    tenant: { fr: 'Locataires divers', en: 'Diverse Tenants' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '19-hermine',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '19',
+    addressStreet: same('Hermine'),
+    title: same('19 Hermine'),
+    status: inDevelopment,
     detailsIntro: {
-      fr: 'Intervention urbaine visant la revitalisation du secteur Hull.',
-      en: 'Urban intervention focused on revitalizing the Hull district.'
+      fr: 'Projet à venir à Salaberry-de-Valleyfield.',
+      en: 'Upcoming project in Salaberry-de-Valleyfield.'
     },
     detailsBody: {
-      fr: 'Le projet introduit de nouvelles connexions pietonnes vers le front d eau.',
-      en: 'The project introduces new pedestrian connections to the waterfront.'
+      fr: 'Un développement résidentiel à venir qui ajoutera 54 unités au marché de Valleyfield.',
+      en: 'An upcoming residential development planned to add 54 units to the Valleyfield market.'
     },
-    owner: { fr: 'Hull Fabric LP', en: 'Hull Fabric LP' },
-    manager: { fr: 'Outaouais Property Team', en: 'Outaouais Property Team' },
-    gallery: seededGallery('hull-fabric')
+    facts: [
+      fact('Statut', 'Status', inDevelopment),
+      fact('Programme', 'Program', { fr: 'Résidentiel', en: 'Residential' }),
+      fact('Unités résidentielles', 'Residential units', '54')
+    ],
+    gallery: gallery('19-hermine')
   },
   {
-    id: 'plateau-civic-hall',
-    category: { fr: 'Gatineau', en: 'Gatineau' },
-    city: { fr: 'Gatineau', en: 'Gatineau' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '241',
-    addressStreet: 'Yonge',
-    title: { fr: 'Forum du Plateau', en: 'Plateau Civic Hall' },
-    yearBuilt: '2015',
-    squareFeet: '15220',
-    propertyType: { fr: 'Institutionnel + commerce', en: 'Institutional + Retail' },
-    tenant: { fr: 'Usages civiques', en: 'Civic Uses' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '116-saint-jean-baptiste',
+    category: same('Salaberry-de-Valleyfield'),
+    city: same('Salaberry-de-Valleyfield'),
+    province: same('QC'),
+    addressNumber: '116',
+    addressStreet: same('Saint-Jean-Baptiste'),
+    title: same('116 Saint-Jean-Baptiste'),
+    status: inDevelopment,
     detailsIntro: {
-      fr: 'Ensemble ancre par une place publique et des services de proximite.',
-      en: 'Complex anchored by a public square and local-serving amenities.'
+      fr: 'Projet résidentiel à venir à Salaberry-de-Valleyfield.',
+      en: 'Upcoming residential project in Salaberry-de-Valleyfield.'
     },
     detailsBody: {
-      fr: 'Le batiment cible une operation a haute performance energetique.',
-      en: 'The building targets high-performance operational energy metrics.'
+      fr: 'Un projet résidentiel à venir de 32 unités pensé comme ajout ciblé au tissu urbain existant.',
+      en: 'An upcoming 32-unit residential project conceived as a focused addition to the existing urban fabric.'
     },
-    owner: { fr: 'Plateau Civic Trust', en: 'Plateau Civic Trust' },
-    manager: { fr: 'Civic Hall Operations', en: 'Civic Hall Operations' },
-    gallery: seededGallery('plateau-civic-hall')
+    facts: [
+      fact('Statut', 'Status', inDevelopment),
+      fact('Programme', 'Program', { fr: 'Résidentiel', en: 'Residential' }),
+      fact('Unités résidentielles', 'Residential units', '32')
+    ],
+    gallery: gallery('116-saint-jean-baptiste')
   },
   {
-    id: 'lennox-promenade',
-    category: { fr: 'Sherbrooke', en: 'Sherbrooke' },
-    city: { fr: 'Sherbrooke', en: 'Sherbrooke' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '275',
-    addressStreet: 'Yonge',
-    title: { fr: 'Promenade Lennox', en: 'Lennox Promenade' },
-    yearBuilt: '2011',
-    squareFeet: '8875',
-    propertyType: { fr: 'Residentiel de densification', en: 'Infill Residential' },
-    tenant: { fr: 'Residents', en: 'Residents' },
-    status: { fr: 'Occupe', en: 'Occupied' },
+    id: '82-90-dalhousie',
+    category: same('Huntingdon'),
+    city: same('Huntingdon'),
+    province: same('QC'),
+    addressNumber: '82-90',
+    addressStreet: same('Dalhousie'),
+    title: same('82-90 Dalhousie'),
+    status: inDevelopment,
     detailsIntro: {
-      fr: 'Projet residentiel de densification douce proche des services.',
-      en: 'Gentle-density residential project close to everyday services.'
+      fr: 'Projet résidentiel à venir à Huntingdon.',
+      en: 'Upcoming residential project in Huntingdon.'
     },
     detailsBody: {
-      fr: 'Les rez-de-chaussee actifs renforcent l animation du domaine public.',
-      en: 'Active ground floors strengthen public-realm animation.'
+      fr: 'Un développement résidentiel multi-phases appelé à livrer 170 unités sur cinq étapes successives.',
+      en: 'A multi-phase residential development set to deliver 170 units across five successive phases.'
     },
-    owner: { fr: 'Lennox Communities', en: 'Lennox Communities' },
-    manager: { fr: 'Eastern Townships Property', en: 'Eastern Townships Property' },
-    gallery: seededGallery('lennox-promenade')
-  },
-  {
-    id: 'estrie-innovation-park',
-    category: { fr: 'Sherbrooke', en: 'Sherbrooke' },
-    city: { fr: 'Sherbrooke', en: 'Sherbrooke' },
-    province: { fr: 'QC', en: 'QC' },
-    addressNumber: '333',
-    addressStreet: 'Yonge',
-    title: { fr: 'Parc Innovation Estrie', en: 'Estrie Innovation Park' },
-    yearBuilt: '2020',
-    squareFeet: '20540',
-    propertyType: { fr: 'Parc tertiaire durable', en: 'Sustainable Business Park' },
-    tenant: { fr: 'Entreprises en croissance', en: 'Growth-stage Companies' },
-    status: { fr: 'Occupe', en: 'Occupied' },
-    detailsIntro: {
-      fr: 'Parc d affaires concu pour des entreprises en expansion.',
-      en: 'Business park designed for expanding companies.'
-    },
-    detailsBody: {
-      fr: 'Infrastructures evolutives pour la recherche et la fabrication legere.',
-      en: 'Scalable infrastructure for research and light-manufacturing uses.'
-    },
-    owner: { fr: 'Estrie Innovation Holdings', en: 'Estrie Innovation Holdings' },
-    manager: { fr: 'Innovation Park Services', en: 'Innovation Park Services' },
-    gallery: seededGallery('estrie-innovation-park')
+    facts: [
+      fact('Statut', 'Status', inDevelopment),
+      fact('Programme', 'Program', { fr: 'Résidentiel', en: 'Residential' }),
+      fact('Unités résidentielles', 'Residential units', '170'),
+      fact('Phases', 'Phases', '5')
+    ],
+    gallery: gallery('82-90-dalhousie')
   }
 ];

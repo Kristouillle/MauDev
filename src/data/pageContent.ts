@@ -13,9 +13,11 @@ type PageLocaleContent = {
     institutionalTitle: string;
     trustStatement: string;
     projects: Array<{
+      id: string;
       title: string;
       subtitle: string;
       description: string;
+      image: string;
       seeMore: string;
     }>;
     links: {
@@ -59,226 +61,242 @@ export const homeAssets = {
 export const pageContent: Record<Locale, PageLocaleContent> = {
   en: {
     nav: {
-      projects: "What we've done",
-      about: 'How we do it'
+      projects: 'Projects',
+      about: 'Our model'
     },
     home: {
       heroDescription:
-        'Proin lectus nisi, efficitur in ex at, imperdiet consequat massa. Aenean ultrices ut tortor vel porttitor. Vivamus euismod lorem ac tortor placerat varius.',
+        'MauDev is a family real estate developer and general contractor that sources sites, unlocks density, builds, leases, and manages assets through one integrated platform.',
       tickerItems: [
-        'Turn your salary into wealth',
-        'Built our portfolio filling your wallet',
-        'Helping investors since 2019',
-        'Opportunities for first time investors'
+        '483 homes built',
+        '136,000 sq. ft. of commercial and industrial space delivered',
+        '151 homes under construction',
+        '$30M of 2025 construction volume',
+        '776 homes in development'
       ],
-      institutionalTitle: 'Institutional quality for individual investors',
-      trustStatement: 'We seek to build lasting partnerships underpinned by trust and credibility.',
+      institutionalTitle: 'From acquisition to day-to-day management',
+      trustStatement:
+        'A growing track record of delivered and upcoming projects across Quebec local markets.',
       projects: [
         {
-          title: '80 Nicholson',
-          subtitle: 'The heart of Valleyfield',
+          id: '110-alphonse-desjardins',
+          title: '110 Alphonse-Desjardins',
+          subtitle: 'Salaberry-de-Valleyfield',
           description:
-            'Proin aliquam id velit nec pulvinar. Integer non nunc congue, semper nulla id, porta eros. Nam fringilla congue nisi quis vestibulum.',
-          seeMore: 'See more'
+            'A completed 23-unit residential building that shows MauDev\'s execution in local rental housing.',
+          image: '/images/projects/110-alphonse-desjardins.jpg',
+          seeMore: 'See project'
         },
         {
-          title: 'Le 80 Nicholson',
-          subtitle: 'Residential',
+          id: '145-salaberry',
+          title: '145 Salaberry',
+          subtitle: 'Salaberry-de-Valleyfield',
           description:
-            'Mauris malesuada libero vel mi hendrerit, non dictum arcu mattis. Donec varius, odio quis rhoncus posuere, nibh dui luctus metus.',
-          seeMore: 'See more'
+            'A mixed-use asset combining 41 homes with 10,000 sq. ft. of commercial space.',
+          image: '/images/projects/145-salaberry.jpg',
+          seeMore: 'See project'
         },
         {
-          title: 'Saint-Charles Lofts',
-          subtitle: 'Mixed-use conversion',
+          id: '82-90-dalhousie',
+          title: '82-90 Dalhousie',
+          subtitle: 'Huntingdon',
           description:
-            'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; suspendisse faucibus dui vel lorem iaculis.',
-          seeMore: 'See more'
+            'An upcoming five-phase development totaling 170 residential units in MauDev\'s forward pipeline.',
+          image: '/images/projects/82-90-dalhousie.jpg',
+          seeMore: 'See project'
         }
       ],
       links: {
-        investing: 'Investing',
+        investing: 'Our model',
         projects: 'Projects',
-        howToInvest: 'How to invest'
+        howToInvest: 'Discuss an opportunity'
       },
       steps: [
         {
-          title: 'The plan',
-          body: 'Proin aliquam id velit nec pulvinar. Integer non nunc congue, semper nulla id, porta eros.',
+          title: 'The site',
+          body: 'We buy well, identify density upside, and move planning and zoning work forward before construction begins.',
           iconMask: homeAssets.iconMask1
         },
         {
-          title: 'The funds',
-          body: 'Nam fringilla congue nisi quis vestibulum. Curabitur feugiat leo vitae sapien tristique.',
+          title: 'The capital',
+          body: 'MauDev structures financing, manages CMHC files, and keeps cost control tight from day one.',
           iconMask: homeAssets.iconMask2
         },
         {
-          title: 'The build',
-          body: 'Aenean ultrices ut tortor vel porttitor. Vivamus euismod lorem ac tortor placerat varius.',
+          title: 'Construction',
+          body: 'Integrated partners strengthen control over excavation risk, materials, schedule, and field execution.',
           iconMask: homeAssets.iconMask3
         },
         {
-          title: 'The cashout',
-          body: 'Maecenas volutpat sem non auctor rhoncus. Nunc ac sapien lectus et est imperdiet.',
+          title: 'Operations',
+          body: 'The team handles leasing, day-to-day management, bookkeeping, and year-end reporting in house.',
           iconMask: homeAssets.iconMask4
         }
       ]
     },
     about: {
-      title: 'How we do it',
+      title: 'Our integrated model',
       intro:
-        'When we perform for our investors, they entrust us with more capital, support our firm growth, and reinforce our position in alternatives.',
-      capitalLabel: 'Capital Under Management',
-      capitalValue: 'XXm$',
-      formulaHeading: 'Our formula',
+        'MauDev is a family-owned developer and general contractor built for long-term execution. The team combines acquisition, densification, financing, construction, leasing, and administration under one roof to reduce friction and protect investor returns.',
+      capitalLabel: '2025 construction volume',
+      capitalValue: '30m$',
+      formulaHeading: 'One integrated platform',
       formulaSteps: [
         {
-          label: 'Step 1',
-          body: 'We start by tristique molestie mauris, eu molestie augue suscipit eget. Aliquam lorem massa, fermentum non aliquet a, ornare a lorem.'
+          label: 'Acquire & densify',
+          body: 'MauDev targets sites at a favorable land basis and creates value through zoning work, densification, and disciplined market selection.'
         },
         {
-          label: 'Step 2',
-          body: 'Morbi ullamcorper ultrices est, vel interdum metus maximus a. Class aptent taciti sociosqu ad litora torquent per conubia.'
+          label: 'Finance & build',
+          body: 'The team manages financing, tendering, contracts, and site execution, while Trexco and Distributions M. Dion improve control over risk, pricing, and supply.'
         },
         {
-          label: 'Step 3',
-          body: 'Per inceptos himenaeos, we refine operations, then scale outcomes with disciplined execution and investor transparency.'
+          label: 'Lease & manage',
+          body: 'MauDev carries the asset through tenant selection, lease-up, administration, quarterly statements, and year-end reporting.'
         }
       ],
-      valuesHeading: 'What we believe in',
+      valuesHeading: 'Why investors partner with MauDev',
       values: [
         {
-          title: 'Trust',
-          body: 'We communicate clearly with investors at every step and execute with transparency from acquisition to exit.'
+          title: 'Long-term vision',
+          body: 'As a family business, MauDev develops assets with a long view of quality, durability, and investor alignment.'
         },
         {
-          title: 'Accountability',
-          body: 'Every project has clear owners, measurable milestones, and disciplined follow-through.'
+          title: 'Transparency',
+          body: 'The company emphasizes clear communication, disciplined reporting, and visible accountability throughout the project lifecycle.'
         },
         {
-          title: 'Ingenuity',
-          body: 'We solve constraints creatively while protecting fundamentals like risk, quality, and timeline.'
+          title: 'Vertical integration',
+          body: 'Trexco and Distributions M. Dion improve control over excavation risk, supply, pricing, and construction execution.'
         },
         {
-          title: 'Community',
-          body: 'We build projects that create durable value for both investors and local neighborhoods.'
+          title: 'Local market discipline',
+          body: 'MauDev focuses on local markets with strong rental demand, stable pricing, and identifiable value-add opportunities.'
         }
       ],
-      teamTitle: 'The family behind MauDev',
+      teamTitle: 'Leadership',
       teamBody:
-        'Donec elementum mauris in aliquet facilisis. Maecenas volutpat sem non auctor rhoncus. Nunc ac sapien lectus. Fusce lobortis nec dui at sagittis. Aenean placerat semper elit ut dignissim. Vivamus sed turpis enim.'
+        'MauDev is led by Alexandre Paquin, President - Finance, Jean-Christophe Paquin, President - Development, and Samuel Brisson, President - Construction. The broader team also includes Pierre-Hugue in development, Stéphanie Grenon in finance, and Marc-André Dion in business development.'
     }
   },
   fr: {
     nav: {
-      projects: 'Ce que nous avons réalisé',
-      about: 'Comment nous opérons'
+      projects: 'Projets',
+      about: 'Notre modèle'
     },
     home: {
       heroDescription:
-        'Proin lectus nisi, efficitur in ex at, imperdiet consequat massa. Aenean ultrices ut tortor vel porttitor. Vivamus euismod lorem ac tortor placerat varius.',
+        'MauDev est un développeur immobilier familial et entrepreneur général qui repère des sites, optimise leur densification, construit, loue et gère les actifs au sein d\'une même plateforme intégrée.',
       tickerItems: [
-        'Transformez votre salaire en patrimoine',
-        'Un portefeuille bâti pour votre croissance',
-        'Investissement depuis 2019',
-        'Des opportunités accessibles'
+        '483 logements construits',
+        '136 000 pi² commercial et industriel livrés',
+        '151 logements en construction',
+        '30 M$ en volume de construction 2025',
+        '776 logements en développement'
       ],
-      institutionalTitle: 'Qualité institutionnelle pour les investisseurs individuels',
-      trustStatement: 'Nous bâtissons des partenariats durables fondés sur la confiance et la crédibilité.',
+      institutionalTitle: 'De l\'acquisition à la gestion quotidienne',
+      trustStatement:
+        'Un historique de projets livrés et un pipeline actif dans des marchés locatifs locaux du Québec.',
       projects: [
         {
-          title: '80 Nicholson',
-          subtitle: 'Au cœur de Valleyfield',
+          id: '110-alphonse-desjardins',
+          title: '110 Alphonse-Desjardins',
+          subtitle: 'Salaberry-de-Valleyfield',
           description:
-            'Proin aliquam id velit nec pulvinar. Integer non nunc congue, semper nulla id, porta eros. Nam fringilla congue nisi quis vestibulum.',
-          seeMore: 'Voir plus'
+            'Un immeuble résidentiel livré de 23 unités qui illustre l\'exécution de MauDev en logement locatif.',
+          image: '/images/projects/110-alphonse-desjardins.jpg',
+          seeMore: 'Voir le projet'
         },
         {
-          title: 'Le 80 Nicholson',
-          subtitle: 'Résidentiel',
+          id: '145-salaberry',
+          title: '145 Salaberry',
+          subtitle: 'Salaberry-de-Valleyfield',
           description:
-            'Mauris malesuada libero vel mi hendrerit, non dictum arcu mattis. Donec varius, odio quis rhoncus posuere, nibh dui luctus metus.',
-          seeMore: 'Voir plus'
+            'Un actif mixte combinant 41 logements et 10 000 pi² d\'espaces commerciaux.',
+          image: '/images/projects/145-salaberry.jpg',
+          seeMore: 'Voir le projet'
         },
         {
-          title: 'Lofts Saint-Charles',
-          subtitle: 'Conversion mixte',
+          id: '82-90-dalhousie',
+          title: '82-90 Dalhousie',
+          subtitle: 'Huntingdon',
           description:
-            'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; suspendisse faucibus dui vel lorem iaculis.',
-          seeMore: 'Voir plus'
+            'Un développement à venir de 170 logements répartis en 5 phases au cœur du pipeline MauDev.',
+          image: '/images/projects/82-90-dalhousie.jpg',
+          seeMore: 'Voir le projet'
         }
       ],
       links: {
-        investing: 'Investir',
+        investing: 'Notre modèle',
         projects: 'Projets',
-        howToInvest: 'Comment investir'
+        howToInvest: 'Parler à l\'équipe'
       },
       steps: [
         {
-          title: 'Le plan',
-          body: 'Proin aliquam id velit nec pulvinar. Integer non nunc congue, semper nulla id, porta eros.',
+          title: 'Le site',
+          body: 'Nous achetons au bon prix, repérons le potentiel de densification et faisons progresser le zonage avant le chantier.',
           iconMask: homeAssets.iconMask1
         },
         {
-          title: 'Les fonds',
-          body: 'Nam fringilla congue nisi quis vestibulum. Curabitur feugiat leo vitae sapien tristique.',
+          title: 'Le capital',
+          body: 'MauDev structure le financement, gère les dossiers SCHL et maintient un contrôle serré des coûts dès le départ.',
           iconMask: homeAssets.iconMask2
         },
         {
-          title: 'La construction',
-          body: 'Aenean ultrices ut tortor vel porttitor. Vivamus euismod lorem ac tortor placerat varius.',
+          title: 'Construction',
+          body: 'Les partenaires intégrés renforcent le contrôle du risque d\'excavation, des matériaux, de l\'échéancier et de l\'exécution.',
           iconMask: homeAssets.iconMask3
         },
         {
-          title: 'Le retrait',
-          body: 'Maecenas volutpat sem non auctor rhoncus. Nunc ac sapien lectus et est imperdiet.',
+          title: 'Exploitation',
+          body: 'L\'équipe prend en charge la location, la gestion quotidienne, la tenue de livres et les rapports de fin d\'année.',
           iconMask: homeAssets.iconMask4
         }
       ]
     },
     about: {
-      title: 'Comment nous opérons',
+      title: 'Notre modèle intégré',
       intro:
-        'Quand nous livrons des résultats pour nos investisseurs, ils nous confient davantage de capital et soutiennent notre croissance.',
-      capitalLabel: 'Capital sous gestion',
-      capitalValue: 'XXm$',
-      formulaHeading: 'Notre méthode',
+        'MauDev est un développeur familial et entrepreneur général conçu pour l\'exécution à long terme. L\'équipe réunit l\'acquisition, la densification, le financement, la construction, la location et l\'administration sous un même toit afin de réduire la friction et de protéger le rendement des investisseurs.',
+      capitalLabel: 'Volume de construction 2025',
+      capitalValue: '30m$',
+      formulaHeading: 'Une seule plateforme intégrée',
       formulaSteps: [
         {
-          label: 'Étape 1',
-          body: 'Nous commençons par une analyse terrain et une structuration financière précise des opportunités.'
+          label: 'Acquérir et densifier',
+          body: 'MauDev cible des sites à bon prix et crée de la valeur grâce au zonage, à la densification et à une sélection disciplinée des marchés.'
         },
         {
-          label: 'Étape 2',
-          body: 'Nous exécutons chaque chantier avec rigueur opérationnelle et un suivi serré des risques.'
+          label: 'Financer et construire',
+          body: 'L\'équipe gère le financement, les appels d\'offres, les contrats et le chantier, tandis que Trexco et Les Distributions M. Dion améliorent le contrôle du risque, des prix et de l\'approvisionnement.'
         },
         {
-          label: 'Étape 3',
-          body: 'Nous optimisons la sortie et redistribuons la valeur créée dans une logique de long terme.'
+          label: 'Louer et administrer',
+          body: 'MauDev accompagne l\'actif jusqu\'à la sélection des locataires, la location, l\'administration, les états trimestriels et les rapports de fin d\'année.'
         }
       ],
-      valuesHeading: 'Nos convictions',
+      valuesHeading: 'Pourquoi les investisseurs choisissent MauDev',
       values: [
         {
-          title: 'Confiance',
-          body: 'Nous communiquons avec transparence à chaque étape, de l’acquisition à la sortie.'
+          title: 'Vision long terme',
+          body: 'Comme entreprise familiale, MauDev développe des actifs avec une vision durable de la qualité, de la pérennité et de l\'alignement avec les investisseurs.'
         },
         {
-          title: 'Responsabilité',
-          body: 'Chaque projet a des responsables clairs, des jalons mesurables et un suivi rigoureux.'
+          title: 'Transparence',
+          body: 'L\'entreprise privilégie une communication claire, une reddition de comptes disciplinée et une responsabilité visible tout au long du cycle du projet.'
         },
         {
-          title: 'Ingéniosité',
-          body: 'Nous résolvons les contraintes de manière créative sans compromettre la qualité ni les délais.'
+          title: 'Intégration verticale',
+          body: 'Trexco et Les Distributions M. Dion améliorent le contrôle du risque d\'excavation, de l\'approvisionnement, des prix et de l\'exécution en chantier.'
         },
         {
-          title: 'Communauté',
-          body: 'Nous créons de la valeur durable pour les investisseurs et les milieux où nous développons.'
+          title: 'Discipline de marché',
+          body: 'MauDev se concentre sur des marchés locaux où la demande locative est forte, les prix stables et les occasions de création de valeur bien identifiées.'
         }
       ],
-      teamTitle: 'La famille derrière MauDev',
+      teamTitle: 'Équipe de direction',
       teamBody:
-        'Donec elementum mauris in aliquet facilisis. Maecenas volutpat sem non auctor rhoncus. Nunc ac sapien lectus. Fusce lobortis nec dui at sagittis. Aenean placerat semper elit ut dignissim. Vivamus sed turpis enim.'
+        'MauDev est dirigée par Alexandre Paquin, président - finances, Jean-Christophe Paquin, président - développement, et Samuel Brisson, président - construction. L\'équipe élargie comprend aussi Pierre-Hugue au développement, Stéphanie Grenon aux finances et Marc-André Dion au développement des affaires.'
     }
   }
 };

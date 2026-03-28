@@ -4,7 +4,8 @@ export const isLocale = (value: unknown): value is Locale => value === 'fr' || v
 
 export const siteContent = {
   fr: {
-    meta_description: 'MauDev est un développeur immobilier axé sur la durabilité et l’impact positif.',
+    meta_description:
+      'MauDev est un développeur immobilier et entrepreneur général intégré qui prend en charge l\'acquisition, la densification, la construction, la location et la gestion.',
     languageLabel: 'Français',
     alternateLanguageLabel: 'English',
     navigation: [
@@ -14,46 +15,54 @@ export const siteContent = {
       { href: '/fr/contact', label: 'Contact' }
     ],
     home: {
-      title: 'Construire avec excellence, louer avec confiance',
-      meta_description:'MauDev est un développeur immobilier axé sur la durabilité et l’impact positif.',
-      intro:'Nous créons des projets immobiliers durables qui inspirent confiance aux investisseurs et aux communautés.'
+      title: 'Développement immobilier et construction intégrée',
+      meta_description:
+        'MauDev est un développeur immobilier et entrepreneur général intégré qui prend en charge l\'acquisition, la densification, la construction, la location et la gestion.',
+      intro:
+        'Entreprise familiale, MauDev pilote tout le cycle d\'un projet afin de réduire le risque d\'exécution et d\'optimiser la valeur créée.'
     },
     about: {
-      title: 'À propos de nous',
-      meta_description:'Notre équipe combine expertise en développement, finance et exécution de chantier pour livrer des projets à fort impact.',
+      title: 'Notre modèle intégré',
+      meta_description:
+        'MauDev réunit le développement, le financement, la construction, la location et l\'administration au sein d\'un même modèle intégré.',
       body:
-        'Notre équipe combine expertise en développement, finance et exécution de chantier pour livrer des projets à fort impact.'
+        'MauDev réunit le développement, le financement, la construction, la location et l\'administration au sein d\'un même modèle intégré.'
     },
     projects: {
       title: 'Nos projets',
-      subtitle: 'Cliquez sur un projet pour voir plus de détails.',
-      meta_description:'Découvrez nos projets immobiliers durables et innovants.',
+      subtitle: 'Consultez les projets livrés et à venir de MauDev par municipalité.',
+      meta_description:
+        'Découvrez les projets livrés et à venir de MauDev à Salaberry-de-Valleyfield, Huntingdon, Saint-Eustache et Sainte-Martine.',
       modalCta: 'Voir les détails',
       close: 'Fermer'
     },
     contact: {
       title: 'Contact',
-      intro: 'Parlez-nous de votre prochaine opportunité.',
-      meta_description:'Contactez-nous pour discuter de votre prochaine opportunité.',
+      intro: 'Parlez-nous d\'un terrain, d\'un partenariat ou d\'une opportunité d\'investissement.',
+      meta_description:
+        'Contactez MauDev pour discuter d\'un terrain, d\'un partenariat ou d\'une opportunité d\'investissement.',
       emailLabel: 'Courriel',
       phoneLabel: 'Téléphone'
     },
-    footer: '© 2026 MauDev — Tous droits réservés.',
+    footer: '© 2026 MauDev - Tous droits réservés.',
     cookieBanner: {
       title: 'Préférences de confidentialité',
-      description: 'Nous utilisons des témoins pour mesurer l’audience du site. Vous pouvez accepter ou refuser les cookies analytiques.',
+      description:
+        'Nous utilisons des témoins pour mesurer l\'audience du site. Vous pouvez accepter ou refuser les cookies analytiques.',
       accept: 'Accepter',
       reject: 'Refuser',
-      personalize:'Personnaliser',
+      personalize: 'Personnaliser',
       essentials: 'Essentiels au fonctionnement du site.',
-      analytics: 'Les cookies analytiques nous aident à comprendre comment les visiteurs interagissent avec notre site pour améliorer l’expérience utilisateur.',
+      analytics:
+        'Les cookies analytiques nous aident à comprendre comment les visiteurs interagissent avec notre site pour améliorer l\'expérience utilisateur.',
       saveBtn: 'Enregistrer les préférences',
-      ip_notice:'Nous recueillons votre adresse IP à des fins de sécurité et d’analyse. Conformément à la lois sur la protection des données, nous ne partageons pas cette information avec des tiers et nous la conservons uniquement pour la durée nécessaire à ces fins.'
+      ip_notice:
+        'Nous recueillons votre adresse IP à des fins de sécurité et d\'analyse. Conformément aux lois sur la protection des données, nous ne partageons pas cette information avec des tiers et nous la conservons uniquement pour la durée nécessaire à ces fins.'
     }
-    
   },
   en: {
-    meta_description: 'MauDev is a real estate developer focused on sustainability and positive impact.',
+    meta_description:
+      'MauDev is an integrated real estate developer and general contractor handling acquisition, densification, construction, leasing, and property management.',
     languageLabel: 'English',
     alternateLanguageLabel: 'Français',
     navigation: [
@@ -63,43 +72,49 @@ export const siteContent = {
       { href: '/en/contact', label: 'Contact' }
     ],
     home: {
-      title: 'Build excelent, rent with confidence',
-      meta_description:'MauDev is a real estate developer focused on sustainability and positive impact.',
+      title: 'Real Estate Development & Integrated Construction',
+      meta_description:
+        'MauDev is an integrated real estate developer and general contractor handling acquisition, densification, construction, leasing, and property management.',
       intro:
-        'We develop sustainable real-estate projects that inspire confidence for investors and communities.'
+        'As a family business, MauDev leads the full project cycle to reduce execution risk and maximize the value created.'
     },
     about: {
-      title: 'About us',
-      meta_description:'Our team combines development, finance and construction expertise to deliver high-impact projects.',
+      title: 'Our integrated model',
+      meta_description:
+        'MauDev brings development, financing, construction, leasing, and administration together within one integrated operating model.',
       body:
-        'Our team combines development, finance and construction expertise to deliver high-impact projects.'
+        'MauDev brings development, financing, construction, leasing, and administration together within one integrated operating model.'
     },
     projects: {
-      title: 'Our projects',
-      subtitle: 'Click a project to view more details.',
+      title: 'Projects',
+      subtitle: 'Browse MauDev\'s delivered and upcoming projects by municipality.',
       modalCta: 'View details',
       close: 'Close',
-      meta_description:'Discover our sustainable and innovative real estate projects.',
+      meta_description:
+        'Explore MauDev\'s delivered and upcoming projects across Salaberry-de-Valleyfield, Huntingdon, Saint-Eustache, and Sainte-Martine.'
     },
     contact: {
       title: 'Contact',
-      meta_description:'Get in touch with us to discuss your next opportunity.',
-      intro: 'Tell us about your next opportunity.',
+      meta_description:
+        'Contact MauDev to discuss a site, partnership, or investment opportunity.',
+      intro: 'Tell us about a site, partnership, or investment opportunity.',
       emailLabel: 'Email',
       phoneLabel: 'Phone'
     },
-    footer: '© 2026 MauDev — All rights reserved.',
+    footer: '© 2026 MauDev - All rights reserved.',
     cookieBanner: {
       title: 'Privacy preferences',
       description:
         'We use cookies to measure site traffic. You can accept or reject analytics cookies.',
       accept: 'Accept',
       reject: 'Reject',
-      personalize:'Personalize',      
+      personalize: 'Personalize',
       essentials: 'Essentials for site functionality.',
-      analytics: 'Analytics cookies help us understand how visitors interact with our site to improve user experience.',
+      analytics:
+        'Analytics cookies help us understand how visitors interact with our site to improve user experience.',
       saveBtn: 'Save preferences',
-      ip_notice:'We collect your IP address for security and analytics purposes. In accordance with data protection laws, we do not share this information with third parties and we retain it only for as long as necessary for these purposes.'
+      ip_notice:
+        'We collect your IP address for security and analytics purposes. In accordance with data protection laws, we do not share this information with third parties and we retain it only for as long as necessary for these purposes.'
     }
   }
 } as const;
