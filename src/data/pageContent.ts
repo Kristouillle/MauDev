@@ -12,14 +12,8 @@ type PageLocaleContent = {
     tickerItems: string[];
     institutionalTitle: string;
     trustStatement: string;
-    projects: Array<{
-      id: string;
-      title: string;
-      subtitle: string;
-      description: string;
-      image: string;
-      seeMore: string;
-    }>;
+    featuredProjectIds: readonly string[];
+    projectCta: string;
     links: {
       investing: string;
       projects: string;
@@ -58,6 +52,10 @@ export const homeAssets = {
   iconMask4: '/images/cashout.png'
 } as const;
 
+const sharedHomeContent = {
+  featuredProjectIds: ['110-alphonse-desjardins', '145-salaberry', '47-nicholson']
+} as const;
+
 export const pageContent: Record<Locale, PageLocaleContent> = {
   en: {
     nav: {
@@ -77,35 +75,8 @@ export const pageContent: Record<Locale, PageLocaleContent> = {
       institutionalTitle: 'From acquisition to day-to-day management',
       trustStatement:
         'A growing track record of delivered and upcoming projects across Quebec local markets.',
-      projects: [
-        {
-          id: '110-alphonse-desjardins',
-          title: '110 Alphonse-Desjardins',
-          subtitle: 'Salaberry-de-Valleyfield',
-          description:
-            'A completed 23-unit residential building that shows MauDev\'s execution in local rental housing.',
-          image: '/images/projects/110-alphonse-desjardins.jpg',
-          seeMore: 'See project'
-        },
-        {
-          id: '145-salaberry',
-          title: '145 Salaberry',
-          subtitle: 'Salaberry-de-Valleyfield',
-          description:
-            'A mixed-use asset combining 41 homes with 10,000 sq. ft. of commercial space.',
-          image: '/images/projects/145-salaberry.jpg',
-          seeMore: 'See project'
-        },
-        {
-          id: '82-90-dalhousie',
-          title: '82-90 Dalhousie',
-          subtitle: 'Huntingdon',
-          description:
-            'An upcoming five-phase development totaling 170 residential units in MauDev\'s forward pipeline.',
-          image: '/images/projects/82-90-dalhousie.jpg',
-          seeMore: 'See project'
-        }
-      ],
+      featuredProjectIds: sharedHomeContent.featuredProjectIds,
+      projectCta: 'See project',
       links: {
         investing: 'Our model',
         projects: 'Projects',
@@ -197,35 +168,8 @@ export const pageContent: Record<Locale, PageLocaleContent> = {
       institutionalTitle: 'De l\'acquisition à la gestion quotidienne',
       trustStatement:
         'Un historique de projets livrés et un pipeline actif dans des marchés locatifs locaux du Québec.',
-      projects: [
-        {
-          id: '110-alphonse-desjardins',
-          title: '110 Alphonse-Desjardins',
-          subtitle: 'Salaberry-de-Valleyfield',
-          description:
-            'Un immeuble résidentiel livré de 23 unités qui illustre l\'exécution de MauDev en logement locatif.',
-          image: '/images/projects/110-alphonse-desjardins.jpg',
-          seeMore: 'Voir le projet'
-        },
-        {
-          id: '145-salaberry',
-          title: '145 Salaberry',
-          subtitle: 'Salaberry-de-Valleyfield',
-          description:
-            'Un actif mixte combinant 41 logements et 10 000 pi² d\'espaces commerciaux.',
-          image: '/images/projects/145-salaberry.jpg',
-          seeMore: 'Voir le projet'
-        },
-        {
-          id: '82-90-dalhousie',
-          title: '82-90 Dalhousie',
-          subtitle: 'Huntingdon',
-          description:
-            'Un développement à venir de 170 logements répartis en 5 phases au cœur du pipeline MauDev.',
-          image: '/images/projects/82-90-dalhousie.jpg',
-          seeMore: 'Voir le projet'
-        }
-      ],
+      featuredProjectIds: sharedHomeContent.featuredProjectIds,
+      projectCta: 'Voir le projet',
       links: {
         investing: 'Notre modèle',
         projects: 'Projets',

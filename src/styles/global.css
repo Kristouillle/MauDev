@@ -446,7 +446,7 @@ body.body {
   font-weight: 300;
   line-height: 1.2;
   margin: 0 0 1.2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   padding-bottom: 0.75rem;
   position: sticky;
   top: var(--projects-sticky-top);
