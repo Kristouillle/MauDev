@@ -123,12 +123,12 @@ export const pageContent: Record<Locale, PageLocaleContent> = {
           iconMask: homeAssets.iconMask2
         },
         {
-          title: 'Construction',
+          title: 'The construction',
           body: 'Integrated partners strengthen control over excavation risk, materials, schedule, and field execution.',
           iconMask: homeAssets.iconMask3
         },
         {
-          title: 'Operations',
+          title: 'The operations',
           body: 'The team handles leasing, day-to-day management, bookkeeping, and year-end reporting in house.',
           iconMask: homeAssets.iconMask4
         }
@@ -243,12 +243,12 @@ export const pageContent: Record<Locale, PageLocaleContent> = {
           iconMask: homeAssets.iconMask2
         },
         {
-          title: 'Construction',
+          title: 'La construction',
           body: 'Les partenaires intégrés renforcent le contrôle du risque d\'excavation, des matériaux, de l\'échéancier et de l\'exécution.',
           iconMask: homeAssets.iconMask3
         },
         {
-          title: 'Exploitation',
+          title: 'L\'exploitation',
           body: 'L\'équipe prend en charge la location, la gestion quotidienne, la tenue de livres et les rapports de fin d\'année.',
           iconMask: homeAssets.iconMask4
         }
