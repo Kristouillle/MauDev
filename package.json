@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --remote",
-    "build": "astro build",
+    "build": "astro build -remote",
     "preview": "astro preview",
     "check": "astro check"
   },
