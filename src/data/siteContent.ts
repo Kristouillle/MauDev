@@ -11,8 +11,7 @@ export const siteContent = {
     navigation: [
       { href: '/fr', label: 'Présentation' },
       { href: '/fr/about', label: 'À propos' },
-      { href: '/fr/projects', label: 'Projets' },
-      { href: '/fr/contact', label: 'Contact' }
+      { href: '/fr/projects', label: 'Projets' }
     ],
     home: {
       title: 'Développement immobilier et construction intégrée',
@@ -35,14 +34,6 @@ export const siteContent = {
         'Découvrez les projets livrés et à venir de MauDev à Salaberry-de-Valleyfield, Huntingdon, Saint-Eustache et Sainte-Martine.',
       modalCta: 'Voir les détails',
       close: 'Fermer'
-    },
-    contact: {
-      title: 'Contact',
-      intro: 'Parlez-nous d\'un terrain, d\'un partenariat ou d\'une opportunité d\'investissement.',
-      meta_description:
-        'Contactez MauDev pour discuter d\'un terrain, d\'un partenariat ou d\'une opportunité d\'investissement.',
-      emailLabel: 'Courriel',
-      phoneLabel: 'Téléphone'
     },
     footer: '© 2026 MauDev - Tous droits réservés.',
     cookieBanner: {
@@ -68,8 +59,7 @@ export const siteContent = {
     navigation: [
       { href: '/en', label: 'Overview' },
       { href: '/en/about', label: 'About us' },
-      { href: '/en/projects', label: 'Projects' },
-      { href: '/en/contact', label: 'Contact' }
+      { href: '/en/projects', label: 'Projects' }
     ],
     home: {
       title: 'Real Estate Development & Integrated Construction',
@@ -92,14 +82,6 @@ export const siteContent = {
       close: 'Close',
       meta_description:
         'Explore MauDev\'s delivered and upcoming projects across Salaberry-de-Valleyfield, Huntingdon, Saint-Eustache, and Sainte-Martine.'
-    },
-    contact: {
-      title: 'Contact',
-      meta_description:
-        'Contact MauDev to discuss a site, partnership, or investment opportunity.',
-      intro: 'Tell us about a site, partnership, or investment opportunity.',
-      emailLabel: 'Email',
-      phoneLabel: 'Phone'
     },
     footer: '© 2026 MauDev - All rights reserved.',
     cookieBanner: {

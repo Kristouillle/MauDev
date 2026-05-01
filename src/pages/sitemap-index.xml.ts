@@ -11,11 +11,9 @@ export const GET: APIRoute = ({ url }) => {
     '/fr',
     '/fr/about',
     '/fr/projects',
-    '/fr/contact',
     '/en',
     '/en/about',
-    '/en/projects',
-    '/en/contact'
+    '/en/projects'
   ];
 
   const baseUrl = getBaseUrl(url.origin);

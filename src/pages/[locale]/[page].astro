@@ -2,68 +2,45 @@
 import About from '../../components/About.astro';
 import Navbar from '../../components/Navbar.astro';
 import ProjectsGrid from '../../components/ProjectsGrid.astro';
-import { isLocale, siteContent, type Locale } from '../../data/siteContent';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import { isLocale, type Locale } from '../../data/siteContent';
 import PageLayout from '../../layouts/PageLayout.astro';
 
-type PageKey = 'about' | 'projects' | 'contact';
+type PageKey = 'about' | 'projects';
 
 export function getStaticPaths() {
   const locales: Locale[] = ['fr', 'en'];
-  const pageKeys: PageKey[] = ['about', 'projects', 'contact'];
+  const pageKeys: PageKey[] = ['about', 'projects'];
   return locales.flatMap((locale) => pageKeys.map((page) => ({ params: { locale, page } })));
 }
 
 const locale: Locale = isLocale(Astro.params.locale)
   ? Astro.params.locale
   : 'en';
-const page: PageKey = Astro.params.page === 'about' || Astro.params.page === 'projects' || Astro.params.page === 'contact'
+const page: PageKey = Astro.params.page === 'about' || Astro.params.page === 'projects'
   ? Astro.params.page
-  : 'contact';
-const content = siteContent[locale];
+  : 'about';
 
 const pageTitleByLocale: Record<Locale, Record<PageKey, string>> = {
   fr: {
     about: 'Notre modèle intégré | MauDev',
-    projects: 'Projets | MauDev',
-    contact: 'Contact | MauDev'
+    projects: 'Projets | MauDev'
   },
   en: {
     about: 'Our integrated model | MauDev',
-    projects: 'Projects | MauDev',
-    contact: 'Contact | MauDev'
+    projects: 'Projects | MauDev'
   }
 };
 ---
 
-{
-  page === 'about' || page === 'projects' ? (
-    <PageLayout locale={locale} title={pageTitleByLocale[locale][page]}>
-      <Navbar locale={locale} />
-      {
-        page === 'about' ? (
-          <About locale={locale} />
-        ) : (
-          <section class="content-block content-block--projects">
-            <ProjectsGrid locale={locale} />
-          </section>
-        )
-      }
-    </PageLayout>
-  ) : (
-    <BaseLayout locale={locale} title={pageTitleByLocale[locale][page]}>
-      {
-        page === 'contact' && (
-          <section class="content-block reveal">
-            <h1>{content.contact.title}</h1>
-            <p>{content.contact.intro}</p>
-            <ul class="contact-list">
-              <li><strong>{content.contact.emailLabel}:</strong> info@example.com</li>
-              <li><strong>{content.contact.phoneLabel}:</strong> +1 555 010 020</li>
-            </ul>
-          </section>
-        )
-      }
-    </BaseLayout>
-  )
-}
+<PageLayout locale={locale} title={pageTitleByLocale[locale][page]}>
+  <Navbar locale={locale} />
+  {
+    page === 'about' ? (
+      <About locale={locale} />
+    ) : (
+      <section class="content-block content-block--projects">
+        <ProjectsGrid locale={locale} />
+      </section>
+    )
+  }
+</PageLayout>

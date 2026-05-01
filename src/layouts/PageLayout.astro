@@ -8,7 +8,7 @@ interface Props {
   locale: Locale;
   title: string;
 }
-type PageKey = 'home' | 'about' | 'projects' | 'contact';
+type PageKey = 'home' | 'about' | 'projects';
 
 const { locale, title } = Astro.props;
 const content = siteContent[locale];
