@@ -147,7 +147,7 @@ export const pageContent: Record<Locale, PageLocaleContent> = {
       ],
       teamTitle: 'Leadership',
       teamBody:
-        'MauDev is led by Alexandre Paquin, President - Finance, Jean-Christophe Paquin, President - Development, and Samuel Brisson, President - Construction. The broader team also includes Pierre-Hugue in development, Stéphanie Grenon in finance, and Marc-André Dion in business development.'
+        'MauDev is led by Alexandre Paquin, President - Finance, Jean-Christophe Paquin, President - Development, and Samuel Brisson, President - Construction. The broader team also includes Pierre-Hugues in development, Stéphanie Grenon in finance, and Marc-André Dion in business development.'
     }
   },
   fr: {
@@ -240,7 +240,7 @@ export const pageContent: Record<Locale, PageLocaleContent> = {
       ],
       teamTitle: 'Équipe de direction',
       teamBody:
-        'MauDev est dirigée par Alexandre Paquin, président - finances, Jean-Christophe Paquin, président - développement, et Samuel Brisson, président - construction. L\'équipe élargie comprend aussi Pierre-Hugue au développement, Stéphanie Grenon aux finances et Marc-André Dion au développement des affaires.'
+        'MauDev est dirigée par Alexandre Paquin, président - finances, Jean-Christophe Paquin, président - développement, et Samuel Brisson, président - construction. L\'équipe élargie comprend aussi Pierre-Hugues au développement, Stéphanie Grenon aux finances et Marc-André Dion au développement des affaires.'
     }
   }
 };
